@@ -49,15 +49,15 @@ graph TB
 4. RSC renders HTML with data, streams to client
 5. Client hydrates with Zustand state + Framer Motion animations
 
-### API Route (Write)
-1. Client fires mutation (e.g., PATCH location status)
-2. Zustand applies optimistic update immediately
-3. Route Handler (`/api/locations/[id]`) receives request
-4. Validates session server-side via `getServerSession()`
-5. Validates body with Zod schema
-6. Prisma executes write, returns updated record
-7. Client reconciles server response (or reverts on error)
-8. Toast notification confirms save
+### API Route (Write — Inline Editing)
+1. User clicks a field to enter edit mode (pencil icon appears on hover)
+2. User modifies value and saves (blur, Enter, or checkmark button)
+3. `useLocationUpdate` hook fires `PATCH /api/locations/[id]`
+4. Route Handler validates session server-side via `auth()`
+5. Prisma executes write, returns updated record
+6. `router.refresh()` revalidates the Server Component with fresh data
+7. Toast notification confirms save (Sonner)
+8. On error: toast shows failure message, field retains previous value
 
 ## Auth Flow
 
@@ -108,9 +108,36 @@ RootLayout
 | Layer | Tool | Scope |
 |-------|------|-------|
 | Server state | Prisma (RSC) | Database reads in Server Components |
-| Client mutations | fetch + Route Handlers | CRUD via `/api/*` routes |
+| Client mutations | `useLocationUpdate` hook + Route Handlers | CRUD via `/api/*` routes |
 | UI state | Zustand | Sidebar collapsed, active tab, view prefs |
-| Form state | React Hook Form | Inline editing, note creation, settings |
-| Optimistic updates | Zustand + fetch | Status changes, inline edits |
+| Inline editing state | Component-local `useState` | Edit mode, draft values, saving flag |
+| Form state | React Hook Form | Note creation, settings |
 
-No global data cache (like React Query/SWR). Server Components handle reads. Mutations use fetch + `router.refresh()` to revalidate.
+No global data cache (like React Query/SWR). Server Components handle reads. Mutations use `fetch` + `router.refresh()` to revalidate.
+
+## Inline Editing Architecture
+
+```
+User clicks field → InlineEditField/InlineSelectField/InlineToggleField
+  |
+  v
+Component enters edit mode (local state)
+  |
+  v
+User saves (blur / Enter / checkmark)
+  |
+  v
+onSave callback → useLocationUpdate.updateField(field, value)
+  |
+  v
+PATCH /api/locations/[id] → Prisma update → response
+  |
+  v
+Toast (success/error) + router.refresh() → RSC re-renders with fresh data
+```
+
+### Inline Edit Components
+- `InlineEditField` — Text/textarea with pencil icon, Enter/Escape/blur handling
+- `InlineSelectField` — Dropdown for enum fields (platforms, facility types, etc.)
+- `InlineToggleField` — Toggle switch for boolean fields (services, requirements, assets)
+- `StatusPill` (editable mode) — Clickable pill with dropdown for status changes (migration, rebuild, DNS)

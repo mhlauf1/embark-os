@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StatusPill } from "./StatusPill";
 import type { LocationWithRelations, ServiceKey } from "@/types";
 import { SERVICE_LABELS } from "@/types";
-import { PLATFORM_LABELS, MIGRATION_STATUS_LABELS, REBUILD_STATUS_LABELS } from "@/lib/constants";
+import { PLATFORM_LABELS, MIGRATION_STATUS_LABELS, REBUILD_STATUS_LABELS, MIGRATION_STATUSES, REBUILD_STATUSES } from "@/lib/constants";
 import { OverviewTab } from "./LocationDetail/OverviewTab";
 import { SiteTab } from "./LocationDetail/SiteTab";
 import { InfraTab } from "./LocationDetail/InfraTab";
@@ -13,11 +13,22 @@ import { MigrationTab } from "./LocationDetail/MigrationTab";
 import { ContactsTab } from "./LocationDetail/ContactsTab";
 import { AssetsTab } from "./LocationDetail/AssetsTab";
 import { NotesTab } from "./LocationDetail/NotesTab";
+import { useLocationUpdate } from "@/hooks/useLocationUpdate";
 
 const SERVICE_KEYS: ServiceKey[] = [
   "serviceBoarding", "serviceDaycare", "serviceGrooming", "serviceTraining",
   "serviceVetCare", "serviceGroomingEd", "serviceWebcams", "serviceMobileGroom", "serviceRetail",
 ];
+
+const migrationOptions = MIGRATION_STATUSES.map((s) => ({
+  value: s,
+  label: MIGRATION_STATUS_LABELS[s],
+}));
+
+const rebuildOptions = REBUILD_STATUSES.map((s) => ({
+  value: s,
+  label: REBUILD_STATUS_LABELS[s],
+}));
 
 interface LocationDetailProps {
   location: LocationWithRelations;
@@ -25,6 +36,7 @@ interface LocationDetailProps {
 
 export function LocationDetail({ location }: LocationDetailProps) {
   const activeServices = SERVICE_KEYS.filter((key) => location[key]);
+  const { updateField } = useLocationUpdate(location.id);
 
   return (
     <div className="p-6">
@@ -35,10 +47,14 @@ export function LocationDetail({ location }: LocationDetailProps) {
             <StatusPill
               status={location.migrationStatus}
               label={MIGRATION_STATUS_LABELS[location.migrationStatus]}
+              options={migrationOptions}
+              onSave={(v) => updateField("migrationStatus", v)}
             />
             <StatusPill
               status={location.rebuildStatus}
               label={REBUILD_STATUS_LABELS[location.rebuildStatus]}
+              options={rebuildOptions}
+              onSave={(v) => updateField("rebuildStatus", v)}
             />
             {location.currentPlatform && (
               <span className="rounded bg-muted px-2 py-0.5 font-[family-name:var(--font-geist-mono)] text-[11px] text-muted-foreground">
@@ -83,12 +99,12 @@ export function LocationDetail({ location }: LocationDetailProps) {
         </TabsList>
 
         <div className="mt-6">
-          <TabsContent value="overview"><OverviewTab location={location} /></TabsContent>
-          <TabsContent value="site"><SiteTab location={location} /></TabsContent>
-          <TabsContent value="infrastructure"><InfraTab location={location} /></TabsContent>
-          <TabsContent value="migration"><MigrationTab location={location} /></TabsContent>
+          <TabsContent value="overview"><OverviewTab location={location} onUpdate={updateField} /></TabsContent>
+          <TabsContent value="site"><SiteTab location={location} onUpdate={updateField} /></TabsContent>
+          <TabsContent value="infrastructure"><InfraTab location={location} onUpdate={updateField} /></TabsContent>
+          <TabsContent value="migration"><MigrationTab location={location} onUpdate={updateField} /></TabsContent>
           <TabsContent value="contacts"><ContactsTab location={location} /></TabsContent>
-          <TabsContent value="assets"><AssetsTab location={location} /></TabsContent>
+          <TabsContent value="assets"><AssetsTab location={location} onUpdate={updateField} /></TabsContent>
           <TabsContent value="notes"><NotesTab location={location} /></TabsContent>
         </div>
       </Tabs>
