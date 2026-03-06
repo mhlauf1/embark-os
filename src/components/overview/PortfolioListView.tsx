@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { ArrowUpDown } from "lucide-react";
 import type { Location } from "@/types";
-import { StatusPill } from "@/components/locations/StatusPill";
+import { PipelineTrack } from "@/components/overview/PipelineTrack";
 import { LighthouseScore } from "@/components/metrics/LighthouseScore";
 import { PLATFORM_LABELS } from "@/lib/constants";
 
@@ -74,13 +74,13 @@ export function PortfolioListView({ locations }: PortfolioListViewProps) {
 
   return (
     <div className="overflow-x-auto rounded-lg border border-border">
-      <table className="w-full text-sm">
+      <table className="w-full min-w-[700px] text-sm">
         <thead>
           <tr className="border-b border-border bg-card">
             {headers.map((h) => (
               <th
                 key={h.key}
-                className={`px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground ${h.className ?? ""}`}
+                className={`px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground ${h.className ?? ""}`}
               >
                 <button
                   onClick={() => toggleSort(h.key)}
@@ -93,7 +93,7 @@ export function PortfolioListView({ locations }: PortfolioListViewProps) {
                 </button>
               </th>
             ))}
-            <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
               Platform
             </th>
           </tr>
@@ -107,19 +107,31 @@ export function PortfolioListView({ locations }: PortfolioListViewProps) {
               <td className="px-4 py-3">
                 <Link
                   href={`/locations/${location.slug}`}
-                  className="font-medium text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+                  className="font-display text-base text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
                 >
                   {location.name}
                 </Link>
               </td>
-              <td className="px-4 py-3 text-muted-foreground">
+              <td className="px-4 py-3 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-wider text-muted-foreground">
                 {location.city}, {location.state}
               </td>
               <td className="px-4 py-3">
-                <StatusPill status={location.migrationStatus} />
+                <div className="w-28">
+                  <PipelineTrack
+                    pipeline="migration"
+                    status={location.migrationStatus}
+                    compact
+                  />
+                </div>
               </td>
               <td className="px-4 py-3">
-                <StatusPill status={location.rebuildStatus} />
+                <div className="w-28">
+                  <PipelineTrack
+                    pipeline="rebuild"
+                    status={location.rebuildStatus}
+                    compact
+                  />
+                </div>
               </td>
               <td className="px-4 py-3 text-right">
                 {location.lighthousePerf !== null ? (

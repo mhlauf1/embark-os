@@ -47,7 +47,7 @@ export function OverviewToolbar({
         <button
           onClick={() => onViewModeChange("grouped")}
           aria-pressed={viewMode === "grouped"}
-          className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors ${
+          className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-wider transition-colors ${
             viewMode === "grouped"
               ? "bg-border text-foreground"
               : "text-muted-foreground hover:text-muted-foreground"
@@ -59,7 +59,7 @@ export function OverviewToolbar({
         <button
           onClick={() => onViewModeChange("list")}
           aria-pressed={viewMode === "list"}
-          className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors ${
+          className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-wider transition-colors ${
             viewMode === "list"
               ? "bg-border text-foreground"
               : "text-muted-foreground hover:text-muted-foreground"

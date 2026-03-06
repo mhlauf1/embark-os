@@ -3,14 +3,16 @@
 import type { Location } from "@/types";
 import { LighthouseScore } from "./LighthouseScore";
 import {
-  BarChart,
-  Bar,
+  ScatterChart,
+  Scatter,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
+  ReferenceLine,
+  Cell,
+  ZAxis,
 } from "recharts";
 
 interface MetricsViewProps {
@@ -38,26 +40,34 @@ function ScoreCell({ score }: { score: number | null }) {
   );
 }
 
+const LAUF_SLUGS = new Set(["hound-around", "embark-pet-services", "cadence-private-capital"]);
+
 export function MetricsView({ locations }: MetricsViewProps) {
   const locationsWithScores = locations.filter(
     (l) => l.lighthousePerf !== null || l.lighthouseSEO !== null
   );
 
-  const chartData = locations
-    .filter((l) => l.lighthousePerf !== null)
+  const scatterData = locations
+    .filter((l) => l.lighthousePerf !== null && l.lighthouseA11y !== null && l.lighthouseBP !== null && l.lighthouseSEO !== null)
     .map((l) => ({
-      name: l.name.length > 15 ? l.name.substring(0, 15) + "..." : l.name,
-      Performance: l.lighthousePerf,
-      Accessibility: l.lighthouseA11y,
-      SEO: l.lighthouseSEO,
-      "Best Practices": l.lighthouseBP,
+      name: l.name,
+      performance: l.lighthousePerf!,
+      quality: Math.round(((l.lighthouseA11y! + l.lighthouseBP! + l.lighthouseSEO!) / 3)),
+      isLauf: LAUF_SLUGS.has(l.slug),
     }));
+
+  const avgPerf = scatterData.length > 0
+    ? Math.round(scatterData.reduce((sum, d) => sum + d.performance, 0) / scatterData.length)
+    : 0;
+  const avgQuality = scatterData.length > 0
+    ? Math.round(scatterData.reduce((sum, d) => sum + d.quality, 0) / scatterData.length)
+    : 0;
 
   return (
     <div className="space-y-8">
       {/* Score Table */}
-      <div className="rounded-lg border border-border">
-        <table className="w-full">
+      <div className="overflow-x-auto rounded-lg border border-border">
+        <table className="w-full min-w-[700px]">
           <thead>
             <tr className="border-b border-border">
               <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
@@ -111,40 +121,87 @@ export function MetricsView({ locations }: MetricsViewProps) {
         </table>
       </div>
 
-      {/* Chart */}
-      {chartData.length > 0 && (
-        <div className="rounded-lg border border-border bg-card p-6">
-          <h3 className="mb-4 text-sm font-medium text-muted-foreground">
-            Score Comparison
-          </h3>
-          <ResponsiveContainer width="100%" height={350}>
-            <BarChart data={chartData} barCategoryGap="20%">
+      {/* Scatter Plot — Performance vs Quality */}
+      {scatterData.length > 0 && (
+        <div className="rounded-lg border border-border bg-card p-4 sm:p-6">
+          <div className="mb-4">
+            <h3 className="text-sm font-medium text-foreground">
+              Performance vs Quality Score
+            </h3>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Quality = average of Accessibility, Best Practices, and SEO. Dashed lines show portfolio averages.
+            </p>
+          </div>
+          <div className="mb-3 flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <span className="inline-block h-2.5 w-2.5 rounded-full bg-[var(--chart-2)]" />
+              <span className="text-xs text-muted-foreground">Built by Lauf</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="inline-block h-2.5 w-2.5 rounded-full bg-[var(--chart-3)]" />
+              <span className="text-xs text-muted-foreground">Other</span>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={400}>
+            <ScatterChart margin={{ top: 10, right: 30, bottom: 10, left: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis
-                dataKey="name"
+                type="number"
+                dataKey="performance"
+                name="Performance"
+                domain={[20, 100]}
                 tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
                 axisLine={{ stroke: "var(--border)" }}
+                label={{ value: "Performance", position: "bottom", offset: -2, fill: "var(--muted-foreground)", fontSize: 11 }}
               />
               <YAxis
-                domain={[0, 100]}
+                type="number"
+                dataKey="quality"
+                name="Quality"
+                domain={[60, 100]}
                 tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
                 axisLine={{ stroke: "var(--border)" }}
+                label={{ value: "Quality Score", angle: -90, position: "insideLeft", offset: 10, fill: "var(--muted-foreground)", fontSize: 11 }}
               />
+              <ZAxis range={[120, 120]} />
               <Tooltip
-                contentStyle={{
-                  backgroundColor: "var(--card)",
-                  border: "1px solid var(--border)",
-                  borderRadius: "8px",
-                  color: "var(--foreground)",
-                  fontSize: 12,
+                cursor={{ strokeDasharray: "3 3", stroke: "var(--muted-foreground)" }}
+                content={({ payload }) => {
+                  if (!payload || payload.length === 0) return null;
+                  const d = payload[0].payload as typeof scatterData[number];
+                  return (
+                    <div className="rounded-lg border border-border bg-card px-3 py-2 shadow-sm">
+                      <p className="text-xs font-medium text-foreground">{d.name}</p>
+                      <p className="text-xs text-muted-foreground">Performance: {d.performance}</p>
+                      <p className="text-xs text-muted-foreground">Quality: {d.quality}</p>
+                    </div>
+                  );
                 }}
               />
-              <Legend wrapperStyle={{ fontSize: 12, color: "var(--muted-foreground)" }} />
-              <Bar dataKey="Performance" fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Accessibility" fill="var(--chart-2)" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="SEO" fill="var(--chart-3)" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Best Practices" fill="var(--chart-5)" radius={[4, 4, 0, 0]} />
-            </BarChart>
+              <ReferenceLine
+                x={avgPerf}
+                stroke="var(--muted-foreground)"
+                strokeDasharray="6 4"
+                strokeOpacity={0.5}
+                label={{ value: `Avg: ${avgPerf}`, position: "top", fill: "var(--muted-foreground)", fontSize: 10 }}
+              />
+              <ReferenceLine
+                y={avgQuality}
+                stroke="var(--muted-foreground)"
+                strokeDasharray="6 4"
+                strokeOpacity={0.5}
+                label={{ value: `Avg: ${avgQuality}`, position: "right", fill: "var(--muted-foreground)", fontSize: 10 }}
+              />
+              <Scatter data={scatterData}>
+                {scatterData.map((entry, index) => (
+                  <Cell
+                    key={index}
+                    fill={entry.isLauf ? "var(--chart-2)" : "var(--chart-3)"}
+                    fillOpacity={entry.isLauf ? 1 : 0.7}
+                  />
+                ))}
+              </Scatter>
+            </ScatterChart>
           </ResponsiveContainer>
         </div>
       )}

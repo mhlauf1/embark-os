@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/db";
 import { Topbar } from "@/components/layout/Topbar";
 import { PortfolioOverview } from "@/components/overview/PortfolioOverview";
+import { StatsGrid } from "@/components/overview/StatsGrid";
+import { ExportButton } from "@/components/overview/ExportButton";
+import { getLocationGroup } from "@/lib/groupLocations";
 
 async function getStats() {
   const locations = await prisma.location.findMany({
@@ -8,8 +11,14 @@ async function getStats() {
   });
 
   const total = locations.length;
+  const uniqueStates = new Set(locations.map((l) => l.state)).size;
   const migrationsComplete = locations.filter(
     (l) => l.migrationStatus === "complete"
+  ).length;
+  const migrationsInProgress = locations.filter((l) =>
+    ["recon", "stakeholder-outreach", "access-gathered", "in-execution"].includes(
+      l.migrationStatus
+    )
   ).length;
   const rebuildsLive = locations.filter(
     (l) => l.rebuildStatus === "live"
@@ -20,63 +29,66 @@ async function getStats() {
     )
   ).length;
 
-  return { locations, total, migrationsComplete, rebuildsLive, rebuildsInProgress };
+  // Group counts for the segment bar
+  const liveCount = locations.filter((l) => getLocationGroup(l) === "live").length;
+  const inProgressCount = locations.filter((l) => getLocationGroup(l) === "in-progress").length;
+  const notStartedCount = locations.filter((l) => getLocationGroup(l) === "not-started").length;
+
+  // Reputation
+  const ratedLocations = locations.filter((l) => l.googleRating !== null);
+  const ratedCount = ratedLocations.length;
+  const totalReviews = ratedLocations.reduce((sum, l) => sum + (l.googleReviewCount ?? 0), 0);
+  const avgRating = ratedCount > 0
+    ? ratedLocations.reduce((sum, l) => sum + l.googleRating!, 0) / ratedCount
+    : null;
+
+  return {
+    locations,
+    total,
+    uniqueStates,
+    migrationsComplete,
+    migrationsInProgress,
+    rebuildsLive,
+    rebuildsInProgress,
+    liveCount,
+    inProgressCount,
+    notStartedCount,
+    avgRating,
+    totalReviews,
+    ratedCount,
+  };
 }
 
 export default async function OverviewPage() {
-  const { locations, total, migrationsComplete, rebuildsLive, rebuildsInProgress } =
-    await getStats();
+  const stats = await getStats();
 
   return (
     <>
-      <Topbar title="Portfolio Overview" description="Embark Pet Services" />
+      <Topbar title="Portfolio Overview" description="Embark Pet Services">
+        <ExportButton />
+      </Topbar>
       <div className="flex-1 overflow-y-auto">
-        {/* Stats Bar */}
-        <div className="border-b border-border bg-background px-6 py-4">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <StatCard label="Total Locations" value={total} total={total} />
-            <StatCard label="Migrations Complete" value={migrationsComplete} total={total} />
-            <StatCard label="Rebuilds Live" value={rebuildsLive} total={total} />
-            <StatCard label="Rebuilds In Progress" value={rebuildsInProgress} total={total} />
-          </div>
+        <div className="border-b border-border bg-background px-4 py-4 sm:px-6">
+          <StatsGrid
+            total={stats.total}
+            uniqueStates={stats.uniqueStates}
+            migrationsComplete={stats.migrationsComplete}
+            migrationsInProgress={stats.migrationsInProgress}
+            rebuildsLive={stats.rebuildsLive}
+            rebuildsInProgress={stats.rebuildsInProgress}
+            liveCount={stats.liveCount}
+            inProgressCount={stats.inProgressCount}
+            notStartedCount={stats.notStartedCount}
+            avgRating={stats.avgRating}
+            totalReviews={stats.totalReviews}
+            ratedCount={stats.ratedCount}
+          />
         </div>
 
-        {/* Location Cards */}
-        <div className="p-6">
-          <PortfolioOverview locations={locations} />
+        <div className="p-4 sm:p-6">
+          <PortfolioOverview locations={stats.locations} />
         </div>
       </div>
     </>
-  );
-}
-
-function StatCard({
-  label,
-  value,
-  total,
-}: {
-  label: string;
-  value: number;
-  total: number;
-}) {
-  const pct = total > 0 ? (value / total) * 100 : 0;
-
-  return (
-    <div
-      className="rounded-lg border border-border bg-card px-4 py-3"
-      aria-label={`${label}: ${value} of ${total}`}
-    >
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <div className="mt-1 flex items-baseline gap-2">
-        <p className="text-2xl font-semibold text-foreground">{value}</p>
-        <p className="text-sm text-muted-foreground">/ {total}</p>
-      </div>
-      <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-border">
-        <div
-          className="h-full rounded-full bg-primary transition-all duration-500"
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-    </div>
   );
 }

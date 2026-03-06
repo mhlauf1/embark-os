@@ -123,13 +123,112 @@
 
 ---
 
-## Phase 6: Hardening & Enhancements (backlog)
+## Phase 6: Hardening & Enhancements
+
+### Deliverables
+- [x] Hardcoded hex cleanup — replaced all hardcoded hex values with semantic tokens (`text-success`, `text-warning`, `text-destructive`, `text-primary`, `text-muted-foreground`, `var(--chart-N)`) across 14 component files; added `--success` and `--warning` CSS custom properties
+- [x] Mobile responsiveness audit — added min-w to list view table, responsive padding on pipeline tabs + metrics chart, whitespace-nowrap on location detail tab triggers
+- [x] Note deletion — two-click confirm delete with DELETE API route
+- [x] Contact creation from `/contacts` page — add form with location selector, role dropdown, all fields
+
+---
+
+## Phase 7: Competitor & Reputation Tracking
+
+### Deliverables
+- [x] Competitor model (Prisma) — name, platform, city, state, rating, reviewCount per location
+- [x] RatingSnapshot model — historical rating/review data per location
+- [x] CRUD API routes for competitors and rating snapshots
+- [x] CompetitorsTab on location detail — add/edit/delete competitors, CompetitorComparison side-by-side view
+- [x] ReputationSection on metrics page — ratings table + trend chart (Recharts)
+- [x] Reputation cell in StatsGrid bento grid (04 // REPUTATION)
+
+### Routes Created
+- `/api/competitors`
+- `/api/competitors/[id]`
+- `/api/rating-snapshots`
+- `/api/locations/[id]/rating-snapshots`
+
+### New Files
+- `src/components/competitors/CompetitorCard.tsx`
+- `src/components/competitors/CompetitorComparison.tsx`
+- `src/components/competitors/CompetitorForm.tsx`
+- `src/components/locations/LocationDetail/CompetitorsTab.tsx`
+- `src/components/metrics/ReputationSection.tsx`
+- `src/components/overview/ReputationCard.tsx`
+
+---
+
+## Phase 8: Service Coverage & PDF Export
+
+### Deliverables
+- [x] Service coverage matrix — 10 locations x 9 services grid with gap highlighting (services < 3 locations)
+- [x] PDF export — `@react-pdf/renderer` for server-side portfolio PDF generation
+- [x] ExportButton in overview toolbar
+- [x] Portfolio overview editorial redesign — bento stats grid, pipeline tracks, location cards
+
+### Routes Created
+- `/services`
+- `/api/reports/portfolio-pdf`
+
+### New Files
+- `src/components/services/ServiceMatrix.tsx`
+- `src/components/overview/ExportButton.tsx`
+- `src/components/overview/StatsGrid.tsx`
+- `src/components/overview/PipelineTrack.tsx`
+- `src/lib/pdf/generatePortfolioReport.tsx`
+
+---
+
+## Phase 9: Audit & SEO
+
+### Deliverables
+- [x] AuditSnapshot model — Lighthouse scores (perf, a11y, SEO, best practices) with grading
+- [x] Audit dashboard — portfolio-level grades, comparison chart, run audits per location
+- [x] Audit detail view — per-location score breakdown with history
+- [x] SeoSnapshot model — on-page SEO crawl results with 16 checks
+- [x] SEO crawler (`src/lib/seo-crawl.ts`) — cheerio-based HTML parser, 16 weighted checks, letter grading
+- [x] SEO dashboard — portfolio avg grade, crawled count, pass/warn/fail distribution, location table, comparison chart
+- [x] SEO detail view — all checks, issues filter, crawl history
+- [x] SEO recommendations engine — deterministic, location-aware fix suggestions with copy-paste code snippets
+  - Priority grouping (critical/important/minor)
+  - Score potential calculator (before→after grade)
+  - Per-check recommendations with contextual business data (name, city, services)
+
+### Routes Created
+- `/audit`
+- `/audit/[locationId]`
+- `/seo`
+- `/seo/[locationId]`
+- `/api/audits`
+- `/api/audits/[id]`
+- `/api/seo`
+
+### New Files
+- `src/lib/grading.ts`
+- `src/lib/pagespeed.ts`
+- `src/lib/seo-crawl.ts`
+- `src/lib/seo-recommendations.ts`
+- `src/components/audit/AuditDashboard.tsx`
+- `src/components/audit/AuditDetailView.tsx`
+- `src/components/audit/AuditItemList.tsx`
+- `src/components/audit/AuditRunButton.tsx`
+- `src/components/audit/AuditComparisonChart.tsx`
+- `src/components/audit/ScoreTrendChart.tsx`
+- `src/components/audit/GradePill.tsx`
+- `src/components/seo/SeoDashboard.tsx`
+- `src/components/seo/SeoDetailView.tsx`
+- `src/components/seo/SeoCheckList.tsx`
+- `src/components/seo/SeoScoreCard.tsx`
+- `src/components/seo/SeoRunButton.tsx`
+- `src/components/seo/SeoComparisonChart.tsx`
+- `src/components/seo/SeoRecommendations.tsx`
+
+---
+
+## Backlog
 
 ### Remaining Items
-- [x] Hardcoded hex cleanup — replaced all hardcoded hex values with semantic tokens (`text-success`, `text-warning`, `text-destructive`, `text-primary`, `text-muted-foreground`, `var(--chart-N)`) across 14 component files; added `--success` and `--warning` CSS custom properties
-- [ ] Mobile responsiveness audit — test sidebar collapse, table scroll, card stacking on narrow viewports
 - [ ] Data enrichment — run Lighthouse on portfolio sites, populate real scores in seed data
 - [ ] Sanity CMS integration — connect location/content data to a Sanity dataset
 - [ ] Deployment prep — env validation, SQLite → Postgres swap for Vercel, production hardening
-- [ ] Note deletion — add ability to delete notes (currently only create + resolve)
-- [ ] Contact creation from `/contacts` page — currently only possible from location detail

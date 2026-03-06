@@ -1,8 +1,9 @@
 "use client";
 
 import { signOut } from "next-auth/react";
-import { LogOut, Search } from "lucide-react";
+import { LogOut, Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useUIStore } from "@/store/ui.store";
 
 interface TopbarProps {
   title: string;
@@ -11,13 +12,23 @@ interface TopbarProps {
 }
 
 export function Topbar({ title, description, children }: TopbarProps) {
+  const setMobileSidebarOpen = useUIStore((s) => s.setMobileSidebarOpen);
+
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-background px-6">
-      <div className="flex items-center gap-4">
-        <div>
-          <h1 className="text-lg font-semibold text-foreground">{title}</h1>
+    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-background px-4 sm:px-6">
+      <div className="flex items-center gap-3">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-muted-foreground hover:text-foreground md:hidden"
+          onClick={() => setMobileSidebarOpen(true)}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+        <div className="min-w-0">
+          <h1 className="truncate text-lg font-semibold text-foreground">{title}</h1>
           {description && (
-            <p className="text-xs text-muted-foreground">{description}</p>
+            <p className="truncate text-xs text-muted-foreground">{description}</p>
           )}
         </div>
       </div>

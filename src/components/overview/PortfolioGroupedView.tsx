@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import type { Location } from "@/types";
 import { LocationCard } from "@/components/locations/LocationCard";
 import { groupLocations, GROUP_META, type LocationGroup } from "@/lib/groupLocations";
-import { Badge } from "@/components/ui/badge";
 
 const container = {
   hidden: { opacity: 0 },
@@ -36,27 +35,28 @@ export function PortfolioGroupedView({ locations }: PortfolioGroupedViewProps) {
   const groups = groupLocations(locations);
 
   return (
-    <div className="space-y-8">
-      {GROUP_ORDER.map((groupKey) => {
+    <div className="space-y-10">
+      {GROUP_ORDER.map((groupKey, index) => {
         const meta = GROUP_META[groupKey];
         const items = groups[groupKey];
+        const sectionIndex = String(index + 1).padStart(2, "0");
 
         return (
           <section key={groupKey} aria-labelledby={`group-${groupKey}`}>
-            <div className="mb-4 flex items-center gap-3">
-              <h2
-                id={`group-${groupKey}`}
-                className="flex items-center gap-2 border-l-[3px] pl-3 text-sm font-semibold uppercase tracking-wider text-foreground"
-                style={{ borderColor: meta.accent }}
-              >
-                {meta.label}
-              </h2>
-              <Badge
-                variant="secondary"
-                className="rounded-full bg-muted px-2 py-0 text-[11px] text-muted-foreground"
-              >
+            <div className="mb-6 flex items-center gap-3">
+              <div className="flex items-center gap-2.5 shrink-0">
+                <div
+                  className="h-2.5 w-2.5 rounded-full"
+                  style={{ backgroundColor: meta.accent }}
+                />
+                <span className="font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-widest text-muted-foreground">
+                  {sectionIndex} // {meta.label}
+                </span>
+              </div>
+              <div className="h-px flex-1 bg-border" />
+              <span className="font-[family-name:var(--font-geist-mono)] text-[11px] text-muted-foreground shrink-0">
                 {items.length}
-              </Badge>
+              </span>
             </div>
 
             {items.length === 0 ? (

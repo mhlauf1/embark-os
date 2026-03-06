@@ -2,7 +2,9 @@
 
 import type { LocationWithRelations } from "@/types";
 import { LighthouseScore } from "@/components/metrics/LighthouseScore";
+import { AuditRunButton } from "@/components/audit/AuditRunButton";
 import { ExternalLink } from "lucide-react";
+import Link from "next/link";
 import { PLATFORM_LABELS, REBUILD_STATUS_LABELS, REBUILD_STATUSES, PLATFORMS } from "@/lib/constants";
 import { InlineEditField } from "@/components/shared/InlineEditField";
 import { InlineSelectField } from "@/components/shared/InlineSelectField";
@@ -81,12 +83,17 @@ export function SiteTab({ location, onUpdate }: Props) {
           <h3 className="text-sm font-medium text-muted-foreground">
             Lighthouse Scores
           </h3>
-          {location.lighthouseAudited && (
-            <span className="text-xs text-muted-foreground">
-              Audited{" "}
-              {new Date(location.lighthouseAudited).toLocaleDateString()}
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {location.lighthouseAudited && (
+              <span className="text-xs text-muted-foreground">
+                Audited{" "}
+                {new Date(location.lighthouseAudited).toLocaleDateString()}
+              </span>
+            )}
+            {location.currentUrl && (
+              <AuditRunButton locationId={location.id} size="sm" />
+            )}
+          </div>
         </div>
         <div className="flex justify-around">
           <ScoreWithEdit
@@ -114,6 +121,16 @@ export function SiteTab({ location, onUpdate }: Props) {
             onUpdate={onUpdate}
           />
         </div>
+      </div>
+
+      {/* Audit Link */}
+      <div className="flex justify-end">
+        <Link
+          href={`/audit/${location.id}`}
+          className="text-xs text-primary hover:text-primary/80"
+        >
+          View full audit report &rarr;
+        </Link>
       </div>
 
       {/* Rebuild Status */}

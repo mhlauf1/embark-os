@@ -15,6 +15,10 @@ export default async function LocationDetailPage({ params }: Props) {
     include: {
       contacts: { orderBy: { isPrimary: "desc" } },
       notes: { orderBy: { createdAt: "desc" } },
+      competitors: { orderBy: { name: "asc" } },
+      ratingSnapshots: { orderBy: { recordedAt: "desc" } },
+      auditSnapshots: { orderBy: { createdAt: "desc" } },
+      seoSnapshots: { orderBy: { createdAt: "desc" } },
     },
   });
 

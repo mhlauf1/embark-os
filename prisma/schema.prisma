@@ -37,6 +37,10 @@ model Location {
   lighthouseA11y    Int?
   lighthouseSEO     Int?
   lighthouseBP      Int?
+  lighthouseMobilePerf  Int?
+  lighthouseMobileA11y  Int?
+  lighthouseMobileSEO   Int?
+  lighthouseMobileBP    Int?
   lighthouseAudited DateTime?
   googleRating      Float?
   googleReviewCount Int?
@@ -85,8 +89,91 @@ model Location {
   assetNotes     String?
 
   // Relations
-  contacts Contact[]
-  notes    Note[]
+  contacts        Contact[]
+  notes           Note[]
+  competitors     Competitor[]
+  ratingSnapshots RatingSnapshot[]
+  auditSnapshots  AuditSnapshot[]
+  seoSnapshots    SeoSnapshot[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SeoSnapshot {
+  id             String   @id @default(cuid())
+  locationId     String
+  location       Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  url            String
+  overallScore   Int      // 0-100
+  letterGrade    String   // "A+" through "F"
+  responseTimeMs Int
+  checkResults   String   // JSON string of SeoCheckResult[]
+  createdAt      DateTime @default(now())
+
+  @@index([locationId, createdAt])
+}
+
+model AuditSnapshot {
+  id           String   @id @default(cuid())
+  locationId   String
+  location     Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  strategy     String   // "desktop" | "mobile"
+  url          String
+  scorePerf    Int
+  scoreA11y    Int
+  scoreSEO     Int
+  scoreBP      Int
+  overallScore Float
+  letterGrade  String   // "A+" through "F"
+  auditDetails String   // Full PSI response as JSON string
+  createdAt    DateTime @default(now())
+
+  @@index([locationId, strategy, createdAt])
+}
+
+model RatingSnapshot {
+  id                String   @id @default(cuid())
+  locationId        String
+  location          Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  googleRating      Float
+  googleReviewCount Int
+  recordedAt        DateTime @default(now())
+
+  @@index([locationId, recordedAt])
+}
+
+model Competitor {
+  id                String   @id @default(cuid())
+  locationId        String
+  location          Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  name              String
+  url               String?
+  googleRating      Float?
+  googleReviewCount Int?
+  notes             String?
+
+  // Services (mirror Location)
+  serviceBoarding    Boolean @default(false)
+  serviceDaycare     Boolean @default(false)
+  serviceGrooming    Boolean @default(false)
+  serviceTraining    Boolean @default(false)
+  serviceVetCare     Boolean @default(false)
+  serviceGroomingEd  Boolean @default(false)
+  serviceWebcams     Boolean @default(false)
+  serviceMobileGroom Boolean @default(false)
+  serviceRetail      Boolean @default(false)
+
+  // Lighthouse scores
+  lighthousePerf       Int?
+  lighthouseA11y       Int?
+  lighthouseSEO        Int?
+  lighthouseBP         Int?
+  lighthouseMobilePerf Int?
+  lighthouseMobileA11y Int?
+  lighthouseMobileSEO  Int?
+  lighthouseMobileBP   Int?
+  lighthouseAudited    DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -15,7 +15,7 @@ export function PipelineView({ locations }: PipelineViewProps) {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex h-full flex-col">
-      <div className="border-b border-border px-6">
+      <div className="border-b border-border px-4 sm:px-6">
         <TabsList className="bg-transparent p-0">
           <TabsTrigger
             value="migration"
@@ -32,7 +32,7 @@ export function PipelineView({ locations }: PipelineViewProps) {
         </TabsList>
       </div>
 
-      <TabsContent value="migration" className="mt-0 flex-1 overflow-x-auto p-6">
+      <TabsContent value="migration" className="mt-0 flex-1 overflow-x-auto p-4 sm:p-6">
         <KanbanBoard
           locations={locations}
           columns={MIGRATION_STATUSES.map((s) => ({
@@ -43,7 +43,7 @@ export function PipelineView({ locations }: PipelineViewProps) {
         />
       </TabsContent>
 
-      <TabsContent value="rebuild" className="mt-0 flex-1 overflow-x-auto p-6">
+      <TabsContent value="rebuild" className="mt-0 flex-1 overflow-x-auto p-4 sm:p-6">
         <KanbanBoard
           locations={locations}
           columns={REBUILD_STATUSES.map((s) => ({

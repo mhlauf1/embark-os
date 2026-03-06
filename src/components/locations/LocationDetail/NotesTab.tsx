@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { LocationWithRelations } from "@/types";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle, Check, MessageSquare, Plus } from "lucide-react";
+import { AlertTriangle, Check, MessageSquare, Plus, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Props {
   location: LocationWithRelations;
@@ -15,6 +16,7 @@ export function NotesTab({ location }: Props) {
   const [newNote, setNewNote] = useState("");
   const [isBlocker, setIsBlocker] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   async function handleAddNote() {
     if (!newNote.trim()) return;
@@ -33,6 +35,21 @@ export function NotesTab({ location }: Props) {
     setNewNote("");
     setIsBlocker(false);
     setSubmitting(false);
+    router.refresh();
+  }
+
+  async function handleDeleteNote(noteId: string) {
+    if (deletingId !== noteId) {
+      setDeletingId(noteId);
+      return;
+    }
+    const res = await fetch(`/api/notes/${noteId}`, { method: "DELETE" });
+    setDeletingId(null);
+    if (res.ok) {
+      toast.success("Note deleted");
+    } else {
+      toast.error("Failed to delete note");
+    }
     router.refresh();
   }
 
@@ -120,24 +137,41 @@ export function NotesTab({ location }: Props) {
                     </span>
                   </div>
                 </div>
-                {note.isBlocker && (
+                <div className="flex items-center gap-2">
+                  {note.isBlocker && (
+                    <button
+                      onClick={() =>
+                        handleToggleResolved(note.id, note.isResolved)
+                      }
+                      className={`rounded-md px-2.5 py-1 text-xs ${
+                        note.isResolved
+                          ? "bg-muted text-muted-foreground"
+                          : "bg-status-live-bg text-status-live"
+                      }`}
+                    >
+                      {note.isResolved ? "Unresolve" : (
+                        <span className="flex items-center gap-1">
+                          <Check className="h-3 w-3" /> Resolve
+                        </span>
+                      )}
+                    </button>
+                  )}
                   <button
-                    onClick={() =>
-                      handleToggleResolved(note.id, note.isResolved)
-                    }
-                    className={`rounded-md px-2.5 py-1 text-xs ${
-                      note.isResolved
-                        ? "bg-muted text-muted-foreground"
-                        : "bg-status-live-bg text-status-live"
+                    onClick={() => handleDeleteNote(note.id)}
+                    onBlur={() => setDeletingId(null)}
+                    className={`rounded-md px-2 py-1 text-xs transition-colors ${
+                      deletingId === note.id
+                        ? "bg-destructive/10 text-destructive"
+                        : "text-muted-foreground hover:text-destructive"
                     }`}
                   >
-                    {note.isResolved ? "Unresolve" : (
-                      <span className="flex items-center gap-1">
-                        <Check className="h-3 w-3" /> Resolve
-                      </span>
+                    {deletingId === note.id ? (
+                      "Confirm?"
+                    ) : (
+                      <Trash2 className="h-3.5 w-3.5" />
                     )}
                   </button>
-                )}
+                </div>
               </div>
             </div>
           ))}

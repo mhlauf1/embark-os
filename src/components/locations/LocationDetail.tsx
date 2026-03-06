@@ -13,6 +13,7 @@ import { MigrationTab } from "./LocationDetail/MigrationTab";
 import { ContactsTab } from "./LocationDetail/ContactsTab";
 import { AssetsTab } from "./LocationDetail/AssetsTab";
 import { NotesTab } from "./LocationDetail/NotesTab";
+import { CompetitorsTab } from "./LocationDetail/CompetitorsTab";
 import { useLocationUpdate } from "@/hooks/useLocationUpdate";
 
 const SERVICE_KEYS: ServiceKey[] = [
@@ -39,7 +40,7 @@ export function LocationDetail({ location }: LocationDetailProps) {
   const { updateField } = useLocationUpdate(location.id);
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       {/* Header */}
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
@@ -84,13 +85,13 @@ export function LocationDetail({ location }: LocationDetailProps) {
 
       {/* Tabs */}
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="w-full justify-start border-b border-border bg-transparent p-0">
-          {["Overview", "Site", "Infrastructure", "Migration", "Contacts", "Assets", "Notes"].map(
+        <TabsList className="w-full justify-start overflow-x-auto border-b border-border bg-transparent p-0">
+          {["Overview", "Site", "Infrastructure", "Migration", "Contacts", "Competitors", "Assets", "Notes"].map(
             (tab) => (
               <TabsTrigger
                 key={tab}
                 value={tab.toLowerCase()}
-                className="relative rounded-none border-b-2 border-transparent px-4 py-2.5 text-sm text-muted-foreground transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
+                className="relative whitespace-nowrap rounded-none border-b-2 border-transparent px-4 py-2.5 text-sm text-muted-foreground transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
               >
                 {tab}
               </TabsTrigger>
@@ -104,6 +105,7 @@ export function LocationDetail({ location }: LocationDetailProps) {
           <TabsContent value="infrastructure"><InfraTab location={location} onUpdate={updateField} /></TabsContent>
           <TabsContent value="migration"><MigrationTab location={location} onUpdate={updateField} /></TabsContent>
           <TabsContent value="contacts"><ContactsTab location={location} /></TabsContent>
+          <TabsContent value="competitors"><CompetitorsTab location={location} /></TabsContent>
           <TabsContent value="assets"><AssetsTab location={location} onUpdate={updateField} /></TabsContent>
           <TabsContent value="notes"><NotesTab location={location} /></TabsContent>
         </div>

@@ -4,7 +4,7 @@ export default function SettingsPage() {
   return (
     <>
       <Topbar title="Settings" description="Application preferences" />
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6">
         <div className="max-w-2xl space-y-6">
           <div className="rounded-lg border border-border bg-card p-5">
             <h3 className="mb-1 text-sm font-medium text-foreground">
@@ -28,7 +28,9 @@ export default function SettingsPage() {
                 { keys: ["G", "O"], label: "Go to Overview" },
                 { keys: ["G", "L"], label: "Go to Locations" },
                 { keys: ["G", "P"], label: "Go to Pipeline" },
+                { keys: ["G", "S"], label: "Go to Services" },
                 { keys: ["G", "M"], label: "Go to Metrics" },
+                { keys: ["G", "A"], label: "Go to Site Audit" },
                 { keys: ["G", "C"], label: "Go to Contacts" },
               ].map(({ keys, label }) => (
                 <div

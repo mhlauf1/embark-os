@@ -189,8 +189,8 @@ export function LocationsTable({ locations }: LocationsTableProps) {
         />
       </div>
 
-      <div className="rounded-lg border border-border">
-        <Table>
+      <div className="overflow-x-auto rounded-lg border border-border">
+        <Table className="min-w-[700px]">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
