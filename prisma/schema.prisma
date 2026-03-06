@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Location {
+  id           String    @id @default(cuid())
+  slug         String    @unique
+  name         String
+  address      String?
+  city         String
+  state        String
+  phone        String?
+  acquiredAt   DateTime?
+  facilityType String
+
+  // Services offered
+  serviceBoarding    Boolean @default(false)
+  serviceDaycare     Boolean @default(false)
+  serviceGrooming    Boolean @default(false)
+  serviceTraining    Boolean @default(false)
+  serviceVetCare     Boolean @default(false)
+  serviceGroomingEd  Boolean @default(false)
+  serviceWebcams     Boolean @default(false)
+  serviceMobileGroom Boolean @default(false)
+  serviceRetail      Boolean @default(false)
+
+  // Website - current state
+  currentUrl        String?
+  currentPlatform   String?
+  currentTechStack  String?
+  lighthousePerf    Int?
+  lighthouseA11y    Int?
+  lighthouseSEO     Int?
+  lighthouseBP      Int?
+  lighthouseAudited DateTime?
+  googleRating      Float?
+  googleReviewCount Int?
+
+  // Website - rebuild state
+  rebuildStatus    String  @default("not-scoped")
+  rebuildTemplate  String?
+  previewUrl       String?
+  targetLaunchDate DateTime?
+  liveUrl          String?
+
+  // Website functional requirements
+  needsOnlineBooking     Boolean @default(false)
+  needsWebcamFeed        Boolean @default(false)
+  needsPricingCalculator Boolean @default(false)
+  needsStaffPage         Boolean @default(false)
+  needsServicePages      Boolean @default(false)
+  needsPhotoGallery      Boolean @default(false)
+  needsContactForm       Boolean @default(false)
+  needsMapsEmbed         Boolean @default(false)
+  needsReviewsWidget     Boolean @default(false)
+
+  // Infrastructure
+  domainRegistrar      String?
+  dnsProvider          String?
+  nameservers          String?
+  hostingProvider      String?
+  emailPlatform        String?
+  mxStatus             String?
+  spfStatus            String?
+  dkimStatus           String?
+  infraNotes           String?
+  secondaryDomain      String?
+  secondaryDomainNotes String?
+
+  // Migration status
+  migrationStatus    String @default("not-started")
+  migrationBlockedBy String?
+  migrationNotes     String?
+
+  // Assets
+  hasLogoVector  Boolean @default(false)
+  hasLogoRaster  Boolean @default(false)
+  hasBrandColors Boolean @default(false)
+  hasPhotography String  @default("none")
+  assetNotes     String?
+
+  // Relations
+  contacts Contact[]
+  notes    Note[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Contact {
+  id         String   @id @default(cuid())
+  locationId String
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  name      String
+  email     String?
+  phone     String?
+  role      String
+  company   String?
+  notes     String?
+  isPrimary Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Note {
+  id         String   @id @default(cuid())
+  locationId String
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  body       String
+  author     String  @default("Mike")
+  isBlocker  Boolean @default(false)
+  isResolved Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

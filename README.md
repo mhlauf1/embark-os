@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Embark OS
+
+Internal operations dashboard for **Lauf Studio** managing the **Embark Pet Services** portfolio (10 locations). Single source of truth for web infrastructure, DNS/email state, migration status, rebuild progress, site metrics, contacts, assets, and operational notes.
+
+## Tech Stack
+
+- **Framework**: Next.js 16.1.6 (App Router, TypeScript strict)
+- **Styling**: Tailwind CSS v4, light theme with semantic CSS variables
+- **Components**: shadcn/ui (Radix UI primitives)
+- **State**: Zustand (sidebar, UI preferences)
+- **Tables**: TanStack Table v8
+- **Charts**: Recharts
+- **Animation**: Framer Motion
+- **Database**: SQLite via Prisma 6
+- **Auth**: NextAuth credentials provider (single-user)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment
+cp .env.local.example .env.local
+# Edit .env.local with your credentials
+
+# Initialize database
+npx prisma migrate dev
+npx prisma db seed
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the dashboard.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Routes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Route | Description |
+|-------|-------------|
+| `/` | Portfolio overview with stats + location cards |
+| `/locations` | All locations table (sortable, filterable) |
+| `/locations/[slug]` | Location detail with 7 tabs |
+| `/pipeline` | Migration + rebuild kanban boards |
+| `/metrics` | Lighthouse scores + comparison charts |
+| `/contacts` | Contact directory |
+| `/settings` | App info + keyboard shortcuts |
 
-## Learn More
+## Design System
 
-To learn more about Next.js, take a look at the following resources:
+Light theme using semantic CSS custom properties defined in `src/styles/globals.css`. Components use Tailwind classes like `bg-background`, `text-foreground`, `border-border` -- never hardcoded hex colors. Status badges use dedicated tokens (`bg-status-live-bg`, `text-status-live`, etc.) with high-contrast text on pastel backgrounds.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+See `docs/DESIGN_SYSTEM.md` for full color tokens, typography, spacing, and motion guidelines.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Documentation
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `docs/ARCHITECTURE.md` - System architecture and component hierarchy
+- `docs/DATA_MODEL.md` - Prisma schema and data relationships
+- `docs/DESIGN_SYSTEM.md` - Color tokens, typography, spacing, motion
+- `docs/DECISIONS.md` - Architectural decision records
+- `docs/TIMELINE.md` - Build phases
+- `docs/LOCATIONS.md` - Portfolio location reference data
+- `EMBARK_OS_SPEC.md` - Full project specification
