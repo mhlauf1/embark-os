@@ -108,10 +108,10 @@ const columns: ColumnDef<Location>[] = [
       if (score === null) return <span className="text-muted-foreground">—</span>;
       const color =
         score >= 90
-          ? "text-[#22c55e]"
+          ? "text-success"
           : score >= 50
-            ? "text-[#f59e0b]"
-            : "text-[#ef4444]";
+            ? "text-warning"
+            : "text-destructive";
       return <span className={`font-[family-name:var(--font-geist-mono)] text-sm ${color}`}>{score}</span>;
     },
   },
@@ -123,10 +123,10 @@ const columns: ColumnDef<Location>[] = [
       if (score === null) return <span className="text-muted-foreground">—</span>;
       const color =
         score >= 90
-          ? "text-[#22c55e]"
+          ? "text-success"
           : score >= 50
-            ? "text-[#f59e0b]"
-            : "text-[#ef4444]";
+            ? "text-warning"
+            : "text-destructive";
       return <span className={`font-[family-name:var(--font-geist-mono)] text-sm ${color}`}>{score}</span>;
     },
   },

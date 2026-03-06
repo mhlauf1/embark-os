@@ -64,7 +64,7 @@ const columns: ColumnDef<ContactWithLocation>[] = [
     cell: ({ row }) => (
       <Link
         href={`/locations/${row.original.location.slug}`}
-        className="text-sm text-[#3b82f6] hover:underline"
+        className="text-sm text-primary hover:underline"
       >
         {row.original.location.name}
       </Link>

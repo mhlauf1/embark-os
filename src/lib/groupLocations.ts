@@ -8,18 +8,18 @@ export const GROUP_META: Record<
 > = {
   live: {
     label: "Live",
-    accent: "#22c55e",
-    borderColor: "border-l-[#22c55e]",
+    accent: "var(--success)",
+    borderColor: "border-l-success",
   },
   "in-progress": {
     label: "In Progress",
-    accent: "#f59e0b",
-    borderColor: "border-l-[#f59e0b]",
+    accent: "var(--warning)",
+    borderColor: "border-l-warning",
   },
   "not-started": {
     label: "Not Started",
-    accent: "#52525b",
-    borderColor: "border-l-[#52525b]",
+    accent: "var(--muted-foreground)",
+    borderColor: "border-l-muted-foreground",
   },
 };
 

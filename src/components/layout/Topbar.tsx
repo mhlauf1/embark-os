@@ -26,7 +26,7 @@ export function Topbar({ title, description, children }: TopbarProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="text-[#52525b] hover:text-muted-foreground"
+          className="text-muted-foreground hover:text-foreground"
           onClick={() => {}}
           title="Search (Cmd+K)"
         >
@@ -35,7 +35,7 @@ export function Topbar({ title, description, children }: TopbarProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="text-[#52525b] hover:text-muted-foreground"
+          className="text-muted-foreground hover:text-foreground"
           onClick={() => signOut({ callbackUrl: "/login" })}
           title="Sign out"
         >

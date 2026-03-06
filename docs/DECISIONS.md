@@ -117,11 +117,27 @@
 - Inline styles (Recharts, Toaster) use `var(--token-name)` syntax for theme consistency
 - The `className="dark"` was removed from the `<html>` tag; shadcn/ui `dark:` variants remain in components as fallback but are inactive
 
-**Migration notes**: Hardcoded hex values (`#09090b`, `#111113`, `#18181b`, `#27272a`, `#fafafa`, etc.) were replaced across ~30 component files with semantic Tailwind classes.
+**Migration notes**: Hardcoded hex values (`#09090b`, `#111113`, `#18181b`, `#27272a`, `#fafafa`, etc.) were replaced across ~30 component files with semantic Tailwind classes. In a subsequent pass, remaining hardcoded hex values (`#22c55e`, `#f59e0b`, `#ef4444`, `#3b82f6`, `#52525b`, `#27272a`, `#3f3f46`, `#a1a1aa`) were replaced with new semantic tokens (`--success`, `--warning`) and existing tokens (`destructive`, `primary`, `muted-foreground`, `chart-*`) across 14 files.
 
 ---
 
-## ADR-009: DM Serif Display for Display Typography
+## ADR-009: Inline Editing via Component-Local State
+
+**Decision**: Use lightweight component-local state for inline editing instead of a form library or global store.
+
+**Rationale**:
+- Each editable field is independent — no need for a shared form context
+- `InlineEditField`, `InlineSelectField`, and `InlineToggleField` each manage their own edit/draft/saving state via `useState`
+- A shared `useLocationUpdate` hook centralizes the PATCH call, toast, and `router.refresh()` pattern
+- `StatusPill` was extended (not replaced) with optional `options` + `onSave` props — zero breaking changes to read-only usage
+- `router.refresh()` after save triggers Server Component re-render with fresh Prisma data, avoiding stale state
+- No global edit mode or page-level save button — edits happen field-by-field, matching the Linear/Notion inline editing mental model
+
+**Scope**: All location detail tabs except Contacts (has its own CRUD API) and Notes (already had working create/resolve).
+
+---
+
+## ADR-010: DM Serif Display for Display Typography
 
 **Decision**: Use DM Serif Display (Google Fonts) alongside Geist for UI.
 

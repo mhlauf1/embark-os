@@ -21,10 +21,10 @@ function ScoreCell({ score }: { score: number | null }) {
   if (score === null) return <td className="px-4 py-3 text-muted-foreground">—</td>;
   const color =
     score >= 90
-      ? "text-[#22c55e]"
+      ? "text-success"
       : score >= 50
-        ? "text-[#f59e0b]"
-        : "text-[#ef4444]";
+        ? "text-warning"
+        : "text-destructive";
   const bg =
     score >= 90
       ? "bg-status-live-bg/50"
@@ -140,10 +140,10 @@ export function MetricsView({ locations }: MetricsViewProps) {
                 }}
               />
               <Legend wrapperStyle={{ fontSize: 12, color: "var(--muted-foreground)" }} />
-              <Bar dataKey="Performance" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Accessibility" fill="#22c55e" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="SEO" fill="#f59e0b" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Best Practices" fill="#a1a1aa" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Performance" fill="var(--chart-1)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Accessibility" fill="var(--chart-2)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="SEO" fill="var(--chart-3)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Best Practices" fill="var(--chart-5)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

@@ -88,7 +88,7 @@ export function PortfolioListView({ locations }: PortfolioListViewProps) {
                 >
                   {h.label}
                   <ArrowUpDown
-                    className={`h-3 w-3 ${sortKey === h.key ? "text-muted-foreground" : "text-[#3f3f46]"}`}
+                    className={`h-3 w-3 ${sortKey === h.key ? "text-muted-foreground" : "text-muted-foreground/70"}`}
                   />
                 </button>
               </th>
@@ -107,7 +107,7 @@ export function PortfolioListView({ locations }: PortfolioListViewProps) {
               <td className="px-4 py-3">
                 <Link
                   href={`/locations/${location.slug}`}
-                  className="font-medium text-foreground hover:text-[#3b82f6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3b82f6] focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+                  className="font-medium text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
                 >
                   {location.name}
                 </Link>
@@ -129,7 +129,7 @@ export function PortfolioListView({ locations }: PortfolioListViewProps) {
                     aria-label={`Lighthouse score: ${location.lighthousePerf}`}
                   />
                 ) : (
-                  <span className="text-[#3f3f46]">&mdash;</span>
+                  <span className="text-muted-foreground">&mdash;</span>
                 )}
               </td>
               <td className="px-4 py-3">

@@ -7,9 +7,9 @@ interface LighthouseScoreProps {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 90) return "#22c55e";
-  if (score >= 50) return "#f59e0b";
-  return "#ef4444";
+  if (score >= 90) return "var(--success)";
+  if (score >= 50) return "var(--warning)";
+  return "var(--destructive)";
 }
 
 export function LighthouseScore({

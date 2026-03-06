@@ -23,10 +23,10 @@ const SERVICE_KEYS: ServiceKey[] = [
 ];
 
 function getAccentColor(rebuildStatus: string): string {
-  if (rebuildStatus === "live") return "#22c55e";
+  if (rebuildStatus === "live") return "var(--success)";
   if (["in-design", "in-development", "in-review", "scoped"].includes(rebuildStatus))
-    return "#f59e0b";
-  return "#52525b";
+    return "var(--warning)";
+  return "var(--muted-foreground)";
 }
 
 export function LocationCard({ location }: LocationCardProps) {

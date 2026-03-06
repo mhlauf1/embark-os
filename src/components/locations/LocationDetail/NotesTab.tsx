@@ -83,7 +83,7 @@ export function NotesTab({ location }: Props) {
       {/* Notes List */}
       {location.notes.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <MessageSquare className="mb-3 h-8 w-8 text-[#27272a]" />
+          <MessageSquare className="mb-3 h-8 w-8 text-muted-foreground" />
           <p className="text-sm text-muted-foreground">No notes yet</p>
         </div>
       ) : (

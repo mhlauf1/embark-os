@@ -26,6 +26,9 @@ export default function DashboardLayout({
               border: "1px solid var(--border)",
               color: "var(--foreground)",
             },
+            classNames: {
+              description: "!text-muted-foreground !opacity-100",
+            },
           }}
         />
       </div>

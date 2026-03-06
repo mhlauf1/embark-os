@@ -45,7 +45,7 @@ export function KanbanCard({
       className={cn(
         "rounded-md border border-border bg-background p-3 transition-shadow",
         isDragging && "opacity-50",
-        isDragOverlay && "shadow-lg shadow-[#3b82f6]/10 border-[#3b82f6]/30"
+        isDragOverlay && "shadow-lg shadow-primary/10 border-primary/30"
       )}
     >
       <div className="flex items-start gap-2">
@@ -59,7 +59,7 @@ export function KanbanCard({
         <div className="min-w-0 flex-1">
           <Link
             href={`/locations/${location.slug}`}
-            className="text-sm font-medium text-foreground hover:text-[#3b82f6]"
+            className="text-sm font-medium text-foreground hover:text-primary"
           >
             {location.name}
           </Link>
@@ -72,7 +72,7 @@ export function KanbanCard({
             </span>
           )}
           {blockedBy && (
-            <div className="mt-2 flex items-center gap-1 text-[11px] text-[#ef4444]">
+            <div className="mt-2 flex items-center gap-1 text-[11px] text-destructive">
               <AlertTriangle className="h-3 w-3" />
               <span className="truncate">{blockedBy}</span>
             </div>

@@ -58,6 +58,10 @@
   --color-status-queued-bg: #f4f4f5;
   --color-status-complete: #1d4ed8;
   --color-status-complete-bg: #dbeafe;
+
+  /* Semantic UI Colors */
+  --color-success: var(--success);
+  --color-warning: var(--warning);
 }
 
 /* Embark OS: Light theme */
@@ -78,6 +82,8 @@
   --accent: #dbeafe;
   --accent-foreground: #1e3a5f;
   --destructive: #ef4444;
+  --success: #22c55e;
+  --warning: #f59e0b;
   --border: #e4e4e7;
   --input: #e4e4e7;
   --ring: #2563eb;
