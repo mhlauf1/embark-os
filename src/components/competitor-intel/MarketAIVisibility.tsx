@@ -58,8 +58,8 @@ export function MarketAIVisibility({ locationId, locationName, checks }: Props) 
             <span
               className="rounded px-2 py-1 font-[family-name:var(--font-geist-mono)] text-sm font-medium"
               style={{
-                color: mentionRate >= 50 ? "#22c55e" : "#ef4444",
-                backgroundColor: mentionRate >= 50 ? "rgba(34,197,94,0.1)" : "rgba(239,68,68,0.1)",
+                color: mentionRate >= 50 ? "#4A9A6E" : "#C45C4A",
+                backgroundColor: mentionRate >= 50 ? "rgba(74,154,110,0.1)" : "rgba(196,92,74,0.1)",
               }}
             >
               {mentionRate}% mention rate
@@ -120,8 +120,8 @@ export function MarketAIVisibility({ locationId, locationName, checks }: Props) 
                       <span
                         className="rounded px-1.5 py-0.5 font-[family-name:var(--font-geist-mono)] text-[10px] font-medium"
                         style={{
-                          color: modelMentions > 0 ? "#22c55e" : "#ef4444",
-                          backgroundColor: modelMentions > 0 ? "rgba(34,197,94,0.1)" : "rgba(239,68,68,0.1)",
+                          color: modelMentions > 0 ? "#4A9A6E" : "#C45C4A",
+                          backgroundColor: modelMentions > 0 ? "rgba(74,154,110,0.1)" : "rgba(196,92,74,0.1)",
                         }}
                       >
                         {modelMentions}/{modelChecks.length}

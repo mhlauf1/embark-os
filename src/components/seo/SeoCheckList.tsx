@@ -19,9 +19,9 @@ const CATEGORY_LABELS: Record<string, string> = {
 const CATEGORY_ORDER = ["meta", "content", "technical", "structured-data"];
 
 const STATUS_ICON = {
-  pass: <CheckCircle2 className="h-4 w-4" style={{ color: "#22c55e" }} />,
-  warn: <AlertTriangle className="h-4 w-4" style={{ color: "#f59e0b" }} />,
-  fail: <XCircle className="h-4 w-4" style={{ color: "#ef4444" }} />,
+  pass: <CheckCircle2 className="h-4 w-4" style={{ color: "#4A9A6E" }} />,
+  warn: <AlertTriangle className="h-4 w-4" style={{ color: "#CB8A40" }} />,
+  fail: <XCircle className="h-4 w-4" style={{ color: "#C45C4A" }} />,
 };
 
 export function SeoCheckList({ checks, filter = "all" }: SeoCheckListProps) {
@@ -138,10 +138,10 @@ export function SeoStatusIcons({ checks }: SeoStatusIconsProps) {
         if (!c) return null;
         const color =
           c.status === "pass"
-            ? "#22c55e"
+            ? "#4A9A6E"
             : c.status === "warn"
-            ? "#f59e0b"
-            : "#ef4444";
+            ? "#CB8A40"
+            : "#C45C4A";
         return (
           <span
             key={id}

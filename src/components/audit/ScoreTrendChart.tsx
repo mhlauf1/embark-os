@@ -45,10 +45,10 @@ export function ScoreTrendChart({ snapshots }: ScoreTrendChartProps) {
   }
 
   const lines = [
-    { key: "Performance", color: "#22c55e" },
-    { key: "Accessibility", color: "#3b82f6" },
-    { key: "SEO", color: "#f59e0b" },
-    { key: "Best Practices", color: "#8b5cf6" },
+    { key: "Performance", color: "#4A9A6E" },
+    { key: "Accessibility", color: "#2D7A6B" },
+    { key: "SEO", color: "#CB8A40" },
+    { key: "Best Practices", color: "#7C6B8A" },
     { key: "Overall", color: "var(--foreground)" },
   ];
 
@@ -101,7 +101,7 @@ export function ScoreTrendChart({ snapshots }: ScoreTrendChartProps) {
             <span
               className="font-[family-name:var(--font-geist-mono)] font-medium"
               style={{
-                color: d.delta > 0 ? "#22c55e" : d.delta < 0 ? "#ef4444" : "var(--muted-foreground)",
+                color: d.delta > 0 ? "#4A9A6E" : d.delta < 0 ? "#C45C4A" : "var(--muted-foreground)",
               }}
             >
               {d.delta > 0 ? "+" : ""}

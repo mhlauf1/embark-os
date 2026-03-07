@@ -110,17 +110,17 @@ export function StatsGrid({
           <div className="mt-1">
             <p className="text-[11px] text-muted-foreground">
               <span className="inline-flex items-center gap-1">
-                <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#22c55e" }} />
+                <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#4A9A6E" }} />
                 {liveCount} live
               </span>
               <span className="mx-1.5">·</span>
               <span className="inline-flex items-center gap-1">
-                <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#f59e0b" }} />
+                <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#CB8A40" }} />
                 {inProgressCount} in progress
               </span>
               <span className="mx-1.5">·</span>
               <span className="inline-flex items-center gap-1">
-                <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#e4e4e7" }} />
+                <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#E5DFD7" }} />
                 {notStartedCount} not started
               </span>
             </p>
@@ -128,9 +128,9 @@ export function StatsGrid({
           <div className="mt-4">
             <SegmentBar
               segments={[
-                { count: liveCount, color: "#22c55e", label: "Live" },
-                { count: inProgressCount, color: "#f59e0b", label: "In Progress" },
-                { count: notStartedCount, color: "#e4e4e7", label: "Not Started" },
+                { count: liveCount, color: "#4A9A6E", label: "Live" },
+                { count: inProgressCount, color: "#CB8A40", label: "In Progress" },
+                { count: notStartedCount, color: "#E5DFD7", label: "Not Started" },
               ]}
             />
           </div>

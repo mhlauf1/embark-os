@@ -13,9 +13,9 @@ interface SeoRecommendationsProps {
 }
 
 const PRIORITY_CONFIG = {
-  critical: { label: "Critical", color: "#ef4444", bg: "rgba(239,68,68,0.08)" },
-  important: { label: "Important", color: "#f59e0b", bg: "rgba(245,158,11,0.08)" },
-  minor: { label: "Minor", color: "#94a3b8", bg: "rgba(148,163,184,0.08)" },
+  critical: { label: "Critical", color: "#C45C4A", bg: "rgba(196,92,74,0.08)" },
+  important: { label: "Important", color: "#CB8A40", bg: "rgba(203,138,64,0.08)" },
+  minor: { label: "Minor", color: "#A89F94", bg: "rgba(168,159,148,0.08)" },
 } as const;
 
 export function SeoRecommendations({ location, checks }: SeoRecommendationsProps) {
@@ -26,7 +26,7 @@ export function SeoRecommendations({ location, checks }: SeoRecommendationsProps
   if (recommendations.length === 0) {
     return (
       <div className="rounded-lg border border-border bg-card p-8 text-center">
-        <div className="font-[family-name:var(--font-geist-mono)] text-2xl font-bold" style={{ color: "#22c55e" }}>
+        <div className="font-[family-name:var(--font-geist-mono)] text-2xl font-bold" style={{ color: "#4A9A6E" }}>
           All Checks Passing
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -199,7 +199,7 @@ function CodeBlock({ code }: { code: string }) {
         className="absolute right-2 top-2 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
         title="Copy to clipboard"
       >
-        {copied ? <Check className="h-3.5 w-3.5" style={{ color: "#22c55e" }} /> : <Copy className="h-3.5 w-3.5" />}
+        {copied ? <Check className="h-3.5 w-3.5" style={{ color: "#4A9A6E" }} /> : <Copy className="h-3.5 w-3.5" />}
       </button>
       <pre className="overflow-x-auto p-3 pr-10 font-[family-name:var(--font-geist-mono)] text-xs text-foreground">
         {code}

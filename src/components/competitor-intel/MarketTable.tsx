@@ -118,8 +118,8 @@ function DeltaPill({ value, suffix }: { value: number | null; suffix?: string })
     <span
       className="inline-block rounded px-1.5 py-0.5 font-[family-name:var(--font-geist-mono)] text-xs font-medium"
       style={{
-        color: isPositive ? "#22c55e" : "#ef4444",
-        backgroundColor: isPositive ? "rgba(34,197,94,0.1)" : "rgba(239,68,68,0.1)",
+        color: isPositive ? "#4A9A6E" : "#C45C4A",
+        backgroundColor: isPositive ? "rgba(74,154,110,0.1)" : "rgba(196,92,74,0.1)",
       }}
     >
       {isPositive ? "+" : ""}{value}{suffix ? ` ${suffix}` : ""}

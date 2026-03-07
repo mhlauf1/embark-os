@@ -14,7 +14,7 @@ interface Props {
   competitors: CompetitorWithRatings[];
 }
 
-const COLORS = ["#a1a1aa", "#f59e0b", "#8b5cf6", "#ec4899", "#06b6d4", "#f97316"];
+const COLORS = ["#A89F94", "#CB8A40", "#7C6B8A", "#C47A6B", "#5BA3A0", "#CB8A40"];
 
 export function RatingTrendChart({ locationName, ratingSnapshots, competitors }: Props) {
   // Build unified timeline
@@ -83,7 +83,7 @@ export function RatingTrendChart({ locationName, ratingSnapshots, competitors }:
             <Line
               type="monotone"
               dataKey={locationName}
-              stroke="#22c55e"
+              stroke="#4A9A6E"
               strokeWidth={2}
               dot={{ r: 3 }}
               connectNulls

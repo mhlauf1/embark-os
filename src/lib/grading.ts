@@ -24,15 +24,15 @@ export function getLetterGrade(score: number): string {
 }
 
 export function getGradeColor(grade: string): string {
-  if (grade.startsWith("A")) return "#22c55e";
-  if (grade.startsWith("B")) return "#3b82f6";
-  if (grade.startsWith("C")) return "#f59e0b";
-  return "#ef4444";
+  if (grade.startsWith("A")) return "#4A9A6E";
+  if (grade.startsWith("B")) return "#2D7A6B";
+  if (grade.startsWith("C")) return "#CB8A40";
+  return "#C45C4A";
 }
 
 export function getGradeBgColor(grade: string): string {
-  if (grade.startsWith("A")) return "rgba(34,197,94,0.1)";
-  if (grade.startsWith("B")) return "rgba(59,130,246,0.1)";
-  if (grade.startsWith("C")) return "rgba(245,158,11,0.1)";
-  return "rgba(239,68,68,0.1)";
+  if (grade.startsWith("A")) return "rgba(74,154,110,0.1)";
+  if (grade.startsWith("B")) return "rgba(45,122,107,0.1)";
+  if (grade.startsWith("C")) return "rgba(203,138,64,0.1)";
+  return "rgba(196,92,74,0.1)";
 }

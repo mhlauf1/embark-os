@@ -101,7 +101,7 @@ export function SeoDashboard({
               <div className="text-center">
                 <div
                   className="font-[family-name:var(--font-geist-mono)] text-sm font-semibold"
-                  style={{ color: "#22c55e" }}
+                  style={{ color: "#4A9A6E" }}
                 >
                   {passCount}
                 </div>
@@ -110,7 +110,7 @@ export function SeoDashboard({
               <div className="text-center">
                 <div
                   className="font-[family-name:var(--font-geist-mono)] text-sm font-semibold"
-                  style={{ color: "#f59e0b" }}
+                  style={{ color: "#CB8A40" }}
                 >
                   {warnCount}
                 </div>
@@ -119,7 +119,7 @@ export function SeoDashboard({
               <div className="text-center">
                 <div
                   className="font-[family-name:var(--font-geist-mono)] text-sm font-semibold"
-                  style={{ color: "#ef4444" }}
+                  style={{ color: "#C45C4A" }}
                 >
                   {failCount}
                 </div>

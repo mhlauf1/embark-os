@@ -77,19 +77,19 @@ export function SeoDetailView({ location, snapshots }: SeoDetailViewProps) {
           <div className="flex flex-1 flex-col gap-2">
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <div className="font-[family-name:var(--font-geist-mono)] text-2xl font-bold" style={{ color: "#22c55e" }}>
+                <div className="font-[family-name:var(--font-geist-mono)] text-2xl font-bold" style={{ color: "#4A9A6E" }}>
                   {checks.filter((c) => c.status === "pass").length}
                 </div>
                 <div className="text-xs text-muted-foreground">Passed</div>
               </div>
               <div>
-                <div className="font-[family-name:var(--font-geist-mono)] text-2xl font-bold" style={{ color: "#f59e0b" }}>
+                <div className="font-[family-name:var(--font-geist-mono)] text-2xl font-bold" style={{ color: "#CB8A40" }}>
                   {checks.filter((c) => c.status === "warn").length}
                 </div>
                 <div className="text-xs text-muted-foreground">Warnings</div>
               </div>
               <div>
-                <div className="font-[family-name:var(--font-geist-mono)] text-2xl font-bold" style={{ color: "#ef4444" }}>
+                <div className="font-[family-name:var(--font-geist-mono)] text-2xl font-bold" style={{ color: "#C45C4A" }}>
                   {checks.filter((c) => c.status === "fail").length}
                 </div>
                 <div className="text-xs text-muted-foreground">Failed</div>
@@ -191,9 +191,9 @@ function SeoHistory({ snapshots }: { snapshots: SeoSnapshot[] }) {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2 font-[family-name:var(--font-geist-mono)] text-xs">
-                    <span style={{ color: "#22c55e" }}>{pass}P</span>
-                    <span style={{ color: "#f59e0b" }}>{warn}W</span>
-                    <span style={{ color: "#ef4444" }}>{fail}F</span>
+                    <span style={{ color: "#4A9A6E" }}>{pass}P</span>
+                    <span style={{ color: "#CB8A40" }}>{warn}W</span>
+                    <span style={{ color: "#C45C4A" }}>{fail}F</span>
                   </div>
                 </td>
               </tr>

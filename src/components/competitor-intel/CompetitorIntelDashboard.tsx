@@ -101,8 +101,8 @@ export function CompetitorIntelDashboard({
                   <span
                     className="rounded px-1.5 py-0.5 text-xs font-medium"
                     style={{
-                      color: avgRatingDelta >= 0 ? "#22c55e" : "#ef4444",
-                      backgroundColor: avgRatingDelta >= 0 ? "rgba(34,197,94,0.1)" : "rgba(239,68,68,0.1)",
+                      color: avgRatingDelta >= 0 ? "#4A9A6E" : "#C45C4A",
+                      backgroundColor: avgRatingDelta >= 0 ? "rgba(74,154,110,0.1)" : "rgba(196,92,74,0.1)",
                     }}
                   >
                     {avgRatingDelta >= 0 ? "ahead" : "behind"}

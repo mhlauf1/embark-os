@@ -9,9 +9,9 @@ interface SeoComparisonChartProps {
 }
 
 function scoreColor(score: number): string {
-  if (score >= 90) return "#22c55e";
-  if (score >= 50) return "#f59e0b";
-  return "#ef4444";
+  if (score >= 90) return "#4A9A6E";
+  if (score >= 50) return "#CB8A40";
+  return "#C45C4A";
 }
 
 export function SeoComparisonChart({

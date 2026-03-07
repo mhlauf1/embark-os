@@ -26,9 +26,9 @@ const LABELS: Record<Pipeline, Record<string, string>> = {
 };
 
 function getSegmentColor(filled: boolean, isComplete: boolean): string {
-  if (!filled) return "#e4e4e7";
-  if (isComplete) return "#22c55e";
-  return "#f59e0b";
+  if (!filled) return "#E5DFD7";
+  if (isComplete) return "#4A9A6E";
+  return "#CB8A40";
 }
 
 export function PipelineTrack({ pipeline, status, compact = false }: PipelineTrackProps) {

@@ -51,8 +51,8 @@ export function WebPerformanceGapChart({ positions }: Props) {
               }}
             />
             <Legend wrapperStyle={{ fontSize: 12 }} />
-            <Bar dataKey="Embark" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="Avg Competitor" fill="#a1a1aa" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="Embark" fill="#2D7A6B" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="Avg Competitor" fill="#A89F94" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

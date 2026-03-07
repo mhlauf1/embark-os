@@ -29,10 +29,10 @@ function getAccentColor(rebuildStatus: string): string {
 }
 
 function getStatusDotColor(rebuildStatus: string): string {
-  if (rebuildStatus === "live") return "#22c55e";
+  if (rebuildStatus === "live") return "#4A9A6E";
   if (["in-design", "in-development", "in-review", "scoped"].includes(rebuildStatus))
-    return "#f59e0b";
-  return "#a1a1aa";
+    return "#CB8A40";
+  return "#A89F94";
 }
 
 function isMigrationActive(migrationStatus: string): boolean {

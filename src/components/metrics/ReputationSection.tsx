@@ -38,7 +38,7 @@ export function ReputationSection({ locations, snapshots }: ReputationSectionPro
 
   const colors = [
     "var(--chart-1)", "var(--chart-2)", "var(--chart-3)",
-    "var(--chart-4)", "var(--chart-5)", "#8b5cf6", "#ec4899", "#06b6d4",
+    "var(--chart-4)", "var(--chart-5)", "#7C6B8A", "#C47A6B", "#5BA3A0",
   ];
 
   return (

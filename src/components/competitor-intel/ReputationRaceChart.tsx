@@ -51,8 +51,8 @@ export function ReputationRaceChart({ positions }: Props) {
               }}
             />
             <Legend wrapperStyle={{ fontSize: 12 }} />
-            <Bar dataKey="Embark" fill="#22c55e" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="Avg Competitor" fill="#a1a1aa" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="Embark" fill="#4A9A6E" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="Avg Competitor" fill="#A89F94" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

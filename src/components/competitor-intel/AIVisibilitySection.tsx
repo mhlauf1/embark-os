@@ -113,8 +113,8 @@ export function AIVisibilitySection({ locations }: Props) {
                       <span
                         className="inline-block rounded px-1.5 py-0.5 font-[family-name:var(--font-geist-mono)] text-xs font-medium"
                         style={{
-                          color: mentions / totalChecks >= 0.5 ? "#22c55e" : "#ef4444",
-                          backgroundColor: mentions / totalChecks >= 0.5 ? "rgba(34,197,94,0.1)" : "rgba(239,68,68,0.1)",
+                          color: mentions / totalChecks >= 0.5 ? "#4A9A6E" : "#C45C4A",
+                          backgroundColor: mentions / totalChecks >= 0.5 ? "rgba(74,154,110,0.1)" : "rgba(196,92,74,0.1)",
                         }}
                       >
                         {Math.round((mentions / totalChecks) * 100)}%
