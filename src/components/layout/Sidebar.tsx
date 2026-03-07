@@ -12,9 +12,9 @@ import {
   PanelLeftClose,
   PanelLeft,
   X,
-  Grid3X3,
-  SearchCheck,
+SearchCheck,
   Radar,
+  Swords,
 } from "lucide-react";
 import { useUIStore } from "@/store/ui.store";
 import { cn } from "@/lib/utils";
@@ -23,10 +23,10 @@ const NAV_ITEMS = [
   { href: "/", label: "Overview", icon: LayoutDashboard, shortcut: "G O" },
   { href: "/locations", label: "Locations", icon: MapPin, shortcut: "G L" },
   { href: "/pipeline", label: "Pipeline", icon: GitBranch, shortcut: "G P" },
-  { href: "/services", label: "Services", icon: Grid3X3, shortcut: "G S" },
-  { href: "/metrics", label: "Metrics", icon: BarChart3, shortcut: "G M" },
+{ href: "/metrics", label: "Metrics", icon: BarChart3, shortcut: "G M" },
   { href: "/audit", label: "Site Audit", icon: SearchCheck, shortcut: "G A" },
   { href: "/seo", label: "SEO Health", icon: Radar, shortcut: "G E" },
+  { href: "/competitors", label: "Competitor Intel", icon: Swords, shortcut: "G I" },
   { href: "/contacts", label: "Contacts", icon: Users, shortcut: "G C" },
 ];
 
