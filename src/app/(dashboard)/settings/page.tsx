@@ -1,4 +1,5 @@
 import { Topbar } from "@/components/layout/Topbar";
+import { SectionDivider } from "@/components/shared/SectionDivider";
 
 export default function SettingsPage() {
   return (
@@ -6,8 +7,9 @@ export default function SettingsPage() {
       <Topbar title="Settings" description="Application preferences" />
       <div className="flex-1 overflow-y-auto p-4 sm:p-6">
         <div className="max-w-2xl space-y-6">
+          <SectionDivider title="Settings" />
           <div className="rounded-lg border border-border bg-card p-5">
-            <h3 className="mb-1 text-sm font-medium text-foreground">
+            <h3 className="mb-1 font-display text-sm font-medium text-foreground">
               Embark OS
             </h3>
             <p className="text-xs text-muted-foreground">
@@ -19,7 +21,7 @@ export default function SettingsPage() {
           </div>
 
           <div className="rounded-lg border border-border bg-card p-5">
-            <h3 className="mb-3 text-sm font-medium text-foreground">
+            <h3 className="mb-3 font-display text-sm font-medium text-foreground">
               Keyboard Shortcuts
             </h3>
             <div className="space-y-2">
@@ -54,7 +56,7 @@ export default function SettingsPage() {
           </div>
 
           <div className="rounded-lg border border-border bg-card p-5">
-            <h3 className="mb-3 text-sm font-medium text-foreground">
+            <h3 className="mb-3 font-display text-sm font-medium text-foreground">
               Data
             </h3>
             <p className="text-xs text-muted-foreground">

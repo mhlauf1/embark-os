@@ -97,7 +97,7 @@ export function KanbanBoard({ locations, columns, statusField }: KanbanBoardProp
               id={column.id}
             >
               <div className="mb-3 flex items-center justify-between">
-                <h3 className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                <h3 className="font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
                   {column.label}
                 </h3>
                 <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">

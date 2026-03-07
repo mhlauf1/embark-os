@@ -14,6 +14,7 @@ import { RatingTrendChart } from "./RatingTrendChart";
 import { ServiceOverlapMatrix } from "./ServiceOverlapMatrix";
 import { MarketAIVisibility } from "./MarketAIVisibility";
 import { getGradeColor, getGradeBgColor } from "@/lib/grading";
+import { SectionDivider } from "@/components/shared/SectionDivider";
 
 interface Props {
   location: Location;
@@ -65,17 +66,12 @@ export function MarketDetailView({ location, competitors, position, ratingSnapsh
     <div className="space-y-8">
       {/* 01 // MARKET POSITION */}
       <section>
-        <div className="mb-4 flex items-center gap-3">
-          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
-            01 // MARKET POSITION
-          </span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionDivider number="01" title="Market Position" />
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="rounded-lg border border-border bg-card p-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Target className="h-4 w-4" />
-              <span className="text-xs">Market Score</span>
+              <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest">Market Score</span>
             </div>
             <div className="mt-2 flex items-baseline gap-2">
               <span className="font-display text-2xl text-foreground">{position.compositeScore}</span>
@@ -91,7 +87,7 @@ export function MarketDetailView({ location, competitors, position, ratingSnapsh
           <div className="rounded-lg border border-border bg-card p-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Star className="h-4 w-4" />
-              <span className="text-xs">Rating Delta</span>
+              <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest">Rating Delta</span>
             </div>
             <div className="mt-2 flex items-baseline gap-2">
               {position.ratingDelta !== null ? (
@@ -118,7 +114,7 @@ export function MarketDetailView({ location, competitors, position, ratingSnapsh
           <div className="rounded-lg border border-border bg-card p-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Zap className="h-4 w-4" />
-              <span className="text-xs">Lighthouse Gap</span>
+              <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest">Lighthouse Gap</span>
             </div>
             <div className="mt-2 flex items-baseline gap-2">
               {position.lighthouseGap !== null ? (
@@ -138,11 +134,7 @@ export function MarketDetailView({ location, competitors, position, ratingSnapsh
 
       {/* 02 // COMPETITORS */}
       <section>
-        <div className="mb-4 flex items-center gap-3">
-          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
-            02 // COMPETITORS
-          </span>
-          <div className="h-px flex-1 bg-border" />
+        <SectionDivider number="02" title="Competitors">
           <div className="flex items-center gap-2">
             {competitorsWithUrls.length > 0 && (
               <button
@@ -171,7 +163,7 @@ export function MarketDetailView({ location, competitors, position, ratingSnapsh
               Add Competitor
             </button>
           </div>
-        </div>
+        </SectionDivider>
 
         {competitors.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -197,12 +189,7 @@ export function MarketDetailView({ location, competitors, position, ratingSnapsh
       {/* 03 // COMPARISON */}
       {competitors.length > 0 && (
         <section>
-          <div className="mb-4 flex items-center gap-3">
-            <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
-              03 // COMPARISON
-            </span>
-            <div className="h-px flex-1 bg-border" />
-          </div>
+          <SectionDivider number="03" title="Comparison" />
           <CompetitorComparison location={location} competitors={competitors} />
         </section>
       )}
@@ -210,24 +197,14 @@ export function MarketDetailView({ location, competitors, position, ratingSnapsh
       {/* 04 // RANKINGS */}
       {competitors.length > 0 && (
         <section>
-          <div className="mb-4 flex items-center gap-3">
-            <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
-              04 // RANKINGS
-            </span>
-            <div className="h-px flex-1 bg-border" />
-          </div>
+          <SectionDivider number="04" title="Rankings" />
           <CompetitorRankTable location={location} competitors={competitors} />
         </section>
       )}
 
       {/* 05 // RATING TRENDS */}
       <section>
-        <div className="mb-4 flex items-center gap-3">
-          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
-            05 // RATING TRENDS
-          </span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionDivider number="05" title="Rating Trends" />
         <RatingTrendChart
           locationName={location.name}
           ratingSnapshots={ratingSnapshots}
@@ -238,24 +215,14 @@ export function MarketDetailView({ location, competitors, position, ratingSnapsh
       {/* 06 // SERVICE COVERAGE */}
       {competitors.length > 0 && (
         <section>
-          <div className="mb-4 flex items-center gap-3">
-            <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
-              06 // SERVICE COVERAGE
-            </span>
-            <div className="h-px flex-1 bg-border" />
-          </div>
+          <SectionDivider number="06" title="Service Coverage" />
           <ServiceOverlapMatrix location={location} competitors={competitors} />
         </section>
       )}
 
       {/* 07 // AI BRAND VISIBILITY */}
       <section>
-        <div className="mb-4 flex items-center gap-3">
-          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
-            07 // AI BRAND VISIBILITY
-          </span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionDivider number="07" title="AI Brand Visibility" />
         <MarketAIVisibility
           locationId={location.id}
           locationName={location.name}

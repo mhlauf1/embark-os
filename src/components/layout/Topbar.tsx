@@ -26,9 +26,9 @@ export function Topbar({ title, description, children }: TopbarProps) {
           <Menu className="h-5 w-5" />
         </Button>
         <div className="min-w-0">
-          <h1 className="truncate text-lg font-semibold text-foreground">{title}</h1>
+          <h1 className="truncate font-display text-lg font-semibold text-foreground">{title}</h1>
           {description && (
-            <p className="truncate text-xs text-muted-foreground">{description}</p>
+            <p className="truncate font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-wider text-muted-foreground">{description}</p>
           )}
         </div>
       </div>

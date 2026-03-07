@@ -8,6 +8,7 @@ import { WebPerformanceGapChart } from "./WebPerformanceGapChart";
 import { AIVisibilitySection } from "./AIVisibilitySection";
 import { getGradeColor, getGradeBgColor } from "@/lib/grading";
 import { Swords, Target, Star, Bot } from "lucide-react";
+import { SectionDivider } from "@/components/shared/SectionDivider";
 
 type LocationWithCompetitors = Location & {
   competitors: (Competitor & { ratingSnapshots: CompetitorRatingSnapshot[] })[];
@@ -46,19 +47,14 @@ export function CompetitorIntelDashboard({
     <div className="space-y-8">
       {/* 01 // MARKET OVERVIEW */}
       <section>
-        <div className="mb-4 flex items-center gap-3">
-          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
-            01 // MARKET OVERVIEW
-          </span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionDivider number="01" title="Market Overview" />
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {/* Total Competitors */}
           <div className="rounded-lg border border-border bg-card p-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Swords className="h-4 w-4" />
-              <span className="text-xs">Total Competitors</span>
+              <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest">Total Competitors</span>
             </div>
             <p className="mt-2 font-display text-2xl text-foreground">{totalCompetitors}</p>
             <p className="mt-0.5 font-[family-name:var(--font-geist-mono)] text-xs text-muted-foreground">
@@ -70,7 +66,7 @@ export function CompetitorIntelDashboard({
           <div className="rounded-lg border border-border bg-card p-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Target className="h-4 w-4" />
-              <span className="text-xs">Avg Market Position</span>
+              <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest">Avg Market Position</span>
             </div>
             <div className="mt-2 flex items-baseline gap-2">
               <span className="font-display text-2xl text-foreground">{avgScore}</span>
@@ -90,7 +86,7 @@ export function CompetitorIntelDashboard({
           <div className="rounded-lg border border-border bg-card p-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Star className="h-4 w-4" />
-              <span className="text-xs">Rating Advantage</span>
+              <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest">Rating Advantage</span>
             </div>
             <div className="mt-2 flex items-baseline gap-2">
               {avgRatingDelta !== null ? (
@@ -121,7 +117,7 @@ export function CompetitorIntelDashboard({
           <div className="rounded-lg border border-border bg-card p-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Bot className="h-4 w-4" />
-              <span className="text-xs">AI Visibility</span>
+              <span className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest">AI Visibility</span>
             </div>
             <div className="mt-2 flex items-baseline gap-2">
               {totalChecks > 0 ? (
@@ -141,45 +137,25 @@ export function CompetitorIntelDashboard({
 
       {/* 02 // MARKET-BY-MARKET */}
       <section>
-        <div className="mb-4 flex items-center gap-3">
-          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
-            02 // MARKET-BY-MARKET
-          </span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionDivider number="02" title="Market-by-Market" />
         <MarketTable positions={positions} />
       </section>
 
       {/* 03 // REPUTATION RACE */}
       <section>
-        <div className="mb-4 flex items-center gap-3">
-          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
-            03 // REPUTATION RACE
-          </span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionDivider number="03" title="Reputation Race" />
         <ReputationRaceChart positions={positions} />
       </section>
 
       {/* 04 // WEB PERFORMANCE GAP */}
       <section>
-        <div className="mb-4 flex items-center gap-3">
-          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
-            04 // WEB PERFORMANCE GAP
-          </span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionDivider number="04" title="Web Performance Gap" />
         <WebPerformanceGapChart positions={positions} />
       </section>
 
       {/* 05 // AI BRAND VISIBILITY */}
       <section>
-        <div className="mb-4 flex items-center gap-3">
-          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
-            05 // AI BRAND VISIBILITY
-          </span>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionDivider number="05" title="AI Brand Visibility" />
         <AIVisibilitySection locations={locations} />
       </section>
     </div>

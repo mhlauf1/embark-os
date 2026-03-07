@@ -8,10 +8,20 @@ type StatusVariant =
   | "in-progress"
   | "blocked"
   | "queued"
+  | "lauf-built"
+  | "in-development"
+  | "onboarding"
+  | "not-engaged"
   | "default";
 
 function getVariant(status: string): StatusVariant {
   const s = status.toLowerCase();
+  // Engagement tier variants
+  if (s === "lauf-built") return "lauf-built";
+  if (s === "in-development" && status === "in-development") return "in-development";
+  if (s === "onboarding") return "onboarding";
+  if (s === "not-engaged") return "not-engaged";
+  // Standard status variants
   if (s === "live" || s === "complete" || s === "correct") return "live";
   if (
     s === "in-development" ||
@@ -37,6 +47,10 @@ const VARIANT_STYLES: Record<StatusVariant, string> = {
   "in-progress": "bg-status-progress-bg text-status-progress",
   blocked: "bg-status-blocked-bg text-status-blocked",
   queued: "bg-status-queued-bg text-status-queued",
+  "lauf-built": "bg-[#E6F3EC] text-[#2D6A4F]",
+  "in-development": "bg-[#EFF6FF] text-[#1D4ED8]",
+  onboarding: "bg-[#FDF3E0] text-[#8B6914]",
+  "not-engaged": "bg-[#F4F1EC] text-[#78716C]",
   default: "bg-muted text-muted-foreground",
 };
 

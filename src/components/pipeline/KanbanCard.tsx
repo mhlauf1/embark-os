@@ -5,6 +5,7 @@ import { CSS } from "@dnd-kit/utilities";
 import Link from "next/link";
 import type { Location } from "@/types";
 import { PLATFORM_LABELS } from "@/lib/constants";
+import { getLocationGroup, GROUP_META } from "@/lib/groupLocations";
 import { GripVertical, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -38,14 +39,18 @@ export function KanbanCard({
       ? location.migrationBlockedBy
       : null;
 
+  const tier = getLocationGroup(location);
+  const tierMeta = GROUP_META[tier];
+
   return (
     <div
       ref={setNodeRef}
-      style={style}
+      style={{ ...style, borderTop: `3px solid ${tierMeta.accent}` }}
       className={cn(
         "rounded-md border border-border bg-background p-3 transition-shadow",
         isDragging && "opacity-50",
-        isDragOverlay && "shadow-lg shadow-primary/10 border-primary/30"
+        isDragOverlay && "shadow-lg shadow-primary/10 border-primary/30",
+        tier === "not-engaged" && "opacity-60"
       )}
     >
       <div className="flex items-start gap-2">
@@ -59,11 +64,11 @@ export function KanbanCard({
         <div className="min-w-0 flex-1">
           <Link
             href={`/locations/${location.slug}`}
-            className="text-sm font-medium text-foreground hover:text-primary"
+            className="font-display text-sm font-medium text-foreground hover:text-primary"
           >
             {location.name}
           </Link>
-          <p className="text-xs text-muted-foreground">
+          <p className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-wider text-muted-foreground">
             {location.city}, {location.state}
           </p>
           {location.currentPlatform && (

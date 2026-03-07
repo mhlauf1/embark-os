@@ -7,6 +7,8 @@ import { AuditRunButton, RunAllButton } from "./AuditRunButton";
 import { AuditComparisonChart } from "./AuditComparisonChart";
 import { getLetterGrade, computeOverallScore, getGradeColor } from "@/lib/grading";
 import { Eye } from "lucide-react";
+import { SectionDivider } from "@/components/shared/SectionDivider";
+import { getLocationGroup, GROUP_META } from "@/lib/groupLocations";
 
 interface AuditDashboardProps {
   locations: Location[];
@@ -64,12 +66,10 @@ export function AuditDashboard({
     <div className="space-y-8">
       {/* 01 // PORTFOLIO GRADES */}
       <div>
-        <div className="mb-4 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-widest text-muted-foreground">
-          01 // Portfolio Grades
-        </div>
+        <SectionDivider number="01" title="Portfolio Grades" />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div className="rounded-lg border border-border bg-card p-5">
-            <div className="text-xs text-muted-foreground">Average Grade</div>
+            <div className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest text-muted-foreground">Average Grade</div>
             <div className="mt-2">
               {avgGrade !== "—" ? (
                 <span
@@ -89,7 +89,7 @@ export function AuditDashboard({
             </div>
           </div>
           <div className="rounded-lg border border-border bg-card p-5">
-            <div className="text-xs text-muted-foreground">Audited</div>
+            <div className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest text-muted-foreground">Audited</div>
             <div className="mt-2 font-display text-4xl font-bold text-foreground">
               {auditedLocations.length}
               <span className="text-lg text-muted-foreground">
@@ -99,7 +99,7 @@ export function AuditDashboard({
             <div className="mt-1 text-xs text-muted-foreground">locations</div>
           </div>
           <div className="rounded-lg border border-border bg-card p-5">
-            <div className="text-xs text-muted-foreground">
+            <div className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest text-muted-foreground">
               Grade Distribution
             </div>
             <div className="mt-2 flex items-end gap-2">
@@ -128,50 +128,52 @@ export function AuditDashboard({
 
       {/* 02 // LOCATION GRADES */}
       <div>
-        <div className="mb-4 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-widest text-muted-foreground">
-          02 // Location Grades
-        </div>
+        <SectionDivider number="02" title="Location Grades" />
         <div className="overflow-x-auto rounded-lg border border-border">
           <table className="w-full min-w-[700px]">
             <thead>
               <tr className="border-b border-border">
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Location
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Desktop
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Mobile
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Perf
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   A11y
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   SEO
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   BP
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Last Audited
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-right font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody>
-              {locationsWithGrades.map(({ location, desktop, mobile }) => (
+              {locationsWithGrades.map(({ location, desktop, mobile }) => {
+                const tier = getLocationGroup(location);
+                const tierMeta = GROUP_META[tier];
+                return (
                 <tr
                   key={location.id}
-                  className="border-b border-border transition-colors hover:bg-muted"
+                  className={`border-b border-border transition-colors hover:bg-muted ${tier === "not-engaged" ? "opacity-60" : ""}`}
+                  style={{ borderLeft: `3px solid ${tierMeta.accent}` }}
                 >
                   <td className="px-4 py-3">
-                    <span className="text-sm font-medium text-foreground">
+                    <span className="font-display text-sm font-medium text-foreground">
                       {location.name}
                     </span>
                     <span className="ml-2 text-xs text-muted-foreground">
@@ -230,7 +232,8 @@ export function AuditDashboard({
                     </div>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -238,9 +241,7 @@ export function AuditDashboard({
 
       {/* 03 // COMPARISON */}
       <div>
-        <div className="mb-4 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-widest text-muted-foreground">
-          03 // Comparison
-        </div>
+        <SectionDivider number="03" title="Comparison" />
         <AuditComparisonChart
           locations={locations}
           snapshots={latestSnapshots}

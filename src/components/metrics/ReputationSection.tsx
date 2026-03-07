@@ -2,6 +2,7 @@
 
 import { Star } from "lucide-react";
 import type { Location, RatingSnapshot } from "@/types";
+import { getLocationGroup, GROUP_META } from "@/lib/groupLocations";
 import {
   LineChart,
   Line,
@@ -43,30 +44,26 @@ export function ReputationSection({ locations, snapshots }: ReputationSectionPro
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-sm font-medium text-foreground">Google Ratings</h3>
-        <p className="mt-0.5 text-xs text-muted-foreground">
-          Reputation data across all locations
-        </p>
-      </div>
-
       {/* Ratings Table */}
       <div className="overflow-x-auto rounded-lg border border-border">
         <table className="w-full min-w-[500px]">
           <thead>
             <tr className="border-b border-border">
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Location</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Rating</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Reviews</th>
+              <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Location</th>
+              <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Rating</th>
+              <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">Reviews</th>
             </tr>
           </thead>
           <tbody>
             {ratedLocations
               .sort((a, b) => (b.googleRating ?? 0) - (a.googleRating ?? 0))
-              .map((location) => (
-                <tr key={location.id} className="border-b border-border transition-colors hover:bg-muted">
+              .map((location) => {
+                const tier = getLocationGroup(location);
+                const tierMeta = GROUP_META[tier];
+                return (
+                <tr key={location.id} className="border-b border-border transition-colors hover:bg-muted" style={{ borderLeft: `3px solid ${tierMeta.accent}` }}>
                   <td className="px-4 py-3">
-                    <span className="text-sm font-medium text-foreground">{location.name}</span>
+                    <span className="font-display text-sm font-medium text-foreground">{location.name}</span>
                     <span className="ml-2 text-xs text-muted-foreground">
                       {location.city}, {location.state}
                     </span>
@@ -83,7 +80,8 @@ export function ReputationSection({ locations, snapshots }: ReputationSectionPro
                     {location.googleReviewCount?.toLocaleString()}
                   </td>
                 </tr>
-              ))}
+                );
+              })}
           </tbody>
         </table>
       </div>

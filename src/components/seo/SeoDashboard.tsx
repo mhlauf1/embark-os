@@ -8,6 +8,8 @@ import { SeoStatusIcons } from "./SeoCheckList";
 import { SeoComparisonChart } from "./SeoComparisonChart";
 import { getLetterGrade, getGradeColor } from "@/lib/grading";
 import { Eye } from "lucide-react";
+import { SectionDivider } from "@/components/shared/SectionDivider";
+import { getLocationGroup, GROUP_META } from "@/lib/groupLocations";
 
 interface SeoDashboardProps {
   locations: Location[];
@@ -61,12 +63,10 @@ export function SeoDashboard({
     <div className="space-y-8">
       {/* 01 // PORTFOLIO SEO HEALTH */}
       <div>
-        <div className="mb-4 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-widest text-muted-foreground">
-          01 // Portfolio SEO Health
-        </div>
+        <SectionDivider number="01" title="Portfolio SEO Health" />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div className="rounded-lg border border-border bg-card p-5">
-            <div className="text-xs text-muted-foreground">Average Grade</div>
+            <div className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest text-muted-foreground">Average Grade</div>
             <div className="mt-2">
               {avgGrade !== "—" ? (
                 <span
@@ -86,7 +86,7 @@ export function SeoDashboard({
             </div>
           </div>
           <div className="rounded-lg border border-border bg-card p-5">
-            <div className="text-xs text-muted-foreground">Crawled</div>
+            <div className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest text-muted-foreground">Crawled</div>
             <div className="mt-2 font-display text-4xl font-bold text-foreground">
               {crawledLocations.length}
               <span className="text-lg text-muted-foreground">
@@ -96,7 +96,7 @@ export function SeoDashboard({
             <div className="mt-1 text-xs text-muted-foreground">locations</div>
           </div>
           <div className="rounded-lg border border-border bg-card p-5">
-            <div className="text-xs text-muted-foreground">Check Results</div>
+            <div className="font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-widest text-muted-foreground">Check Results</div>
             <div className="mt-2 flex items-end gap-3">
               <div className="text-center">
                 <div
@@ -142,44 +142,46 @@ export function SeoDashboard({
 
       {/* 02 // LOCATION SCORES */}
       <div>
-        <div className="mb-4 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-widest text-muted-foreground">
-          02 // Location Scores
-        </div>
+        <SectionDivider number="02" title="Location Scores" />
         <div className="overflow-x-auto rounded-lg border border-border">
           <table className="w-full min-w-[700px]">
             <thead>
               <tr className="border-b border-border">
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Location
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Grade
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Score
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Key Checks
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Response
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Last Crawled
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground">
+                <th className="px-4 py-3 text-right font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody>
-              {locationsWithSeo.map(({ location, snapshot, checks }) => (
+              {locationsWithSeo.map(({ location, snapshot, checks }) => {
+                const tier = getLocationGroup(location);
+                const tierMeta = GROUP_META[tier];
+                return (
                 <tr
                   key={location.id}
-                  className="border-b border-border transition-colors hover:bg-muted"
+                  className={`border-b border-border transition-colors hover:bg-muted ${tier === "not-engaged" ? "opacity-60" : ""}`}
+                  style={{ borderLeft: `3px solid ${tierMeta.accent}` }}
                 >
                   <td className="px-4 py-3">
-                    <span className="text-sm font-medium text-foreground">
+                    <span className="font-display text-sm font-medium text-foreground">
                       {location.name}
                     </span>
                     <span className="ml-2 text-xs text-muted-foreground">
@@ -239,7 +241,8 @@ export function SeoDashboard({
                     </div>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -247,9 +250,7 @@ export function SeoDashboard({
 
       {/* 03 // COMPARISON */}
       <div>
-        <div className="mb-4 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-widest text-muted-foreground">
-          03 // Comparison
-        </div>
+        <SectionDivider number="03" title="Comparison" />
         <SeoComparisonChart
           locations={locations}
           snapshots={latestSnapshots}

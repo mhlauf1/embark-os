@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import type { Location } from "@/types";
 import { LocationCard } from "@/components/locations/LocationCard";
-import { groupLocations, GROUP_META, type LocationGroup } from "@/lib/groupLocations";
+import { SectionDivider } from "@/components/shared/SectionDivider";
+import { groupLocations, GROUP_ORDER, GROUP_META } from "@/lib/groupLocations";
 
 const container = {
   hidden: { opacity: 0 },
@@ -25,8 +26,6 @@ const item = {
   },
 };
 
-const GROUP_ORDER: LocationGroup[] = ["live", "in-progress", "not-started"];
-
 interface PortfolioGroupedViewProps {
   locations: Location[];
 }
@@ -43,21 +42,12 @@ export function PortfolioGroupedView({ locations }: PortfolioGroupedViewProps) {
 
         return (
           <section key={groupKey} aria-labelledby={`group-${groupKey}`}>
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex items-center gap-2.5 shrink-0">
-                <div
-                  className="h-2.5 w-2.5 rounded-full"
-                  style={{ backgroundColor: meta.accent }}
-                />
-                <span className="font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-widest text-muted-foreground">
-                  {sectionIndex} // {meta.label}
-                </span>
-              </div>
-              <div className="h-px flex-1 bg-border" />
-              <span className="font-[family-name:var(--font-geist-mono)] text-[11px] text-muted-foreground shrink-0">
-                {items.length}
-              </span>
-            </div>
+            <SectionDivider
+              number={sectionIndex}
+              title={meta.label}
+              count={items.length}
+              dotColor={meta.accent}
+            />
 
             {items.length === 0 ? (
               <p className="py-4 text-sm text-muted-foreground">

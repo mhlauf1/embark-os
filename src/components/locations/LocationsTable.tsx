@@ -27,6 +27,7 @@ import {
   MIGRATION_STATUS_LABELS,
   REBUILD_STATUS_LABELS,
 } from "@/lib/constants";
+import { getLocationGroup, GROUP_META } from "@/lib/groupLocations";
 import { ArrowUpDown, Search } from "lucide-react";
 
 const columns: ColumnDef<Location>[] = [
@@ -42,8 +43,8 @@ const columns: ColumnDef<Location>[] = [
     ),
     cell: ({ row }) => (
       <div>
-        <span className="font-medium text-foreground">{row.original.name}</span>
-        <span className="ml-2 text-xs text-muted-foreground">
+        <span className="font-display font-medium text-foreground">{row.original.name}</span>
+        <span className="ml-2 font-[family-name:var(--font-geist-mono)] text-[10px] uppercase tracking-wider text-muted-foreground">
           {row.original.city}, {row.original.state}
         </span>
       </div>
@@ -200,7 +201,7 @@ export function LocationsTable({ locations }: LocationsTableProps) {
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="text-xs font-medium text-muted-foreground"
+                    className="font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground"
                   >
                     {header.isPlaceholder
                       ? null
@@ -215,10 +216,14 @@ export function LocationsTable({ locations }: LocationsTableProps) {
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row) => {
+                const tier = getLocationGroup(row.original);
+                const tierMeta = GROUP_META[tier];
+                return (
                 <TableRow
                   key={row.id}
-                  className="cursor-pointer border-b border-border transition-colors duration-120 hover:bg-muted"
+                  className={`cursor-pointer border-b border-border transition-colors duration-120 hover:bg-muted ${tier === "not-engaged" ? "opacity-60" : ""}`}
+                  style={{ borderLeft: `3px solid ${tierMeta.accent}` }}
                   onClick={() =>
                     router.push(`/locations/${row.original.slug}`)
                   }
@@ -232,7 +237,8 @@ export function LocationsTable({ locations }: LocationsTableProps) {
                     </TableCell>
                   ))}
                 </TableRow>
-              ))
+                );
+              })
             ) : (
               <TableRow>
                 <TableCell

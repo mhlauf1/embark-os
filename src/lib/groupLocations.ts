@@ -1,45 +1,66 @@
 import type { Location } from "@/types";
 
-export type LocationGroup = "live" | "in-progress" | "not-started";
+export type LocationGroup = "lauf-built" | "in-development" | "onboarding" | "not-engaged";
+
+export const GROUP_ORDER: LocationGroup[] = [
+  "lauf-built",
+  "in-development",
+  "onboarding",
+  "not-engaged",
+];
 
 export const GROUP_META: Record<
   LocationGroup,
   { label: string; accent: string; borderColor: string }
 > = {
-  live: {
-    label: "Live",
-    accent: "var(--success)",
+  "lauf-built": {
+    label: "Lauf Built",
+    accent: "#4A9A6E",
     borderColor: "border-l-success",
   },
-  "in-progress": {
-    label: "In Progress",
-    accent: "var(--warning)",
+  "in-development": {
+    label: "In Development",
+    accent: "#3B82F6",
+    borderColor: "border-l-blue-500",
+  },
+  onboarding: {
+    label: "Onboarding",
+    accent: "#CB8A40",
     borderColor: "border-l-warning",
   },
-  "not-started": {
-    label: "Not Started",
-    accent: "var(--muted-foreground)",
+  "not-engaged": {
+    label: "Not Engaged",
+    accent: "#E5DFD7",
     borderColor: "border-l-muted-foreground",
   },
 };
 
 export function getLocationGroup(location: Location): LocationGroup {
-  if (location.rebuildStatus === "live") return "live";
+  // Manual override takes priority
+  if (location.engagementTier) {
+    return location.engagementTier as LocationGroup;
+  }
+
+  // Auto-derive from statuses
+  if (location.rebuildStatus === "live") return "lauf-built";
+  if (["in-design", "in-development", "in-review"].includes(location.rebuildStatus))
+    return "in-development";
   if (
-    location.migrationStatus === "not-started" &&
-    location.rebuildStatus === "not-scoped"
+    location.migrationStatus !== "not-started" ||
+    location.rebuildStatus !== "not-scoped"
   )
-    return "not-started";
-  return "in-progress";
+    return "onboarding";
+  return "not-engaged";
 }
 
 export function groupLocations(
   locations: Location[]
 ): Record<LocationGroup, Location[]> {
   const groups: Record<LocationGroup, Location[]> = {
-    live: [],
-    "in-progress": [],
-    "not-started": [],
+    "lauf-built": [],
+    "in-development": [],
+    onboarding: [],
+    "not-engaged": [],
   };
 
   for (const location of locations) {

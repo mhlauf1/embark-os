@@ -97,6 +97,21 @@ export const ROLE_LABELS: Record<string, string> = {
   "facility-manager": "Facility Manager",
 };
 
+export const ENGAGEMENT_TIERS = [
+  "lauf-built",
+  "in-development",
+  "onboarding",
+  "not-engaged",
+] as const;
+
+export const ENGAGEMENT_TIER_LABELS: Record<string, string> = {
+  "lauf-built": "Lauf Built",
+  "in-development": "In Development",
+  onboarding: "Onboarding",
+  "not-engaged": "Not Engaged",
+};
+
+export type EngagementTier = (typeof ENGAGEMENT_TIERS)[number];
 export type MigrationStatus = (typeof MIGRATION_STATUSES)[number];
 export type RebuildStatus = (typeof REBUILD_STATUSES)[number];
 export type Platform = (typeof PLATFORMS)[number];

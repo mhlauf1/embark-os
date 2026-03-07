@@ -61,8 +61,10 @@ export function PortfolioReport({ locations, generatedAt }: ReportData) {
     ? (ratedLocations.reduce((s, l) => s + l.googleRating!, 0) / ratedLocations.length).toFixed(1)
     : "N/A";
   const totalReviews = ratedLocations.reduce((s, l) => s + (l.googleReviewCount ?? 0), 0);
-  const migrationsComplete = locations.filter((l) => l.migrationStatus === "complete").length;
-  const rebuildsLive = locations.filter((l) => l.rebuildStatus === "live").length;
+  const laufBuilt = locations.filter((l) => l.engagementTier === "lauf-built" || (!l.engagementTier && l.rebuildStatus === "live")).length;
+  const inDevelopment = locations.filter((l) => l.engagementTier === "in-development" || (!l.engagementTier && ["in-design", "in-development", "in-review"].includes(l.rebuildStatus))).length;
+  const onboarding = locations.filter((l) => l.engagementTier === "onboarding" || (!l.engagementTier && (l.migrationStatus !== "not-started" || l.rebuildStatus !== "not-scoped") && l.rebuildStatus !== "live" && !["in-design", "in-development", "in-review"].includes(l.rebuildStatus))).length;
+  const notEngaged = total - laufBuilt - inDevelopment - onboarding;
   const uniqueStates = new Set(locations.map((l) => l.state)).size;
 
   return (
@@ -88,12 +90,20 @@ export function PortfolioReport({ locations, generatedAt }: ReportData) {
             <Text style={styles.summaryValue}>{avgRating} ({totalReviews.toLocaleString()} reviews)</Text>
           </View>
           <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Migrations Complete</Text>
-            <Text style={styles.summaryValue}>{migrationsComplete} / {total}</Text>
+            <Text style={styles.summaryLabel}>Lauf Built</Text>
+            <Text style={styles.summaryValue}>{laufBuilt}</Text>
           </View>
           <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Rebuilds Live</Text>
-            <Text style={styles.summaryValue}>{rebuildsLive} / {total}</Text>
+            <Text style={styles.summaryLabel}>In Development</Text>
+            <Text style={styles.summaryValue}>{inDevelopment}</Text>
+          </View>
+          <View style={styles.summaryRow}>
+            <Text style={styles.summaryLabel}>Onboarding</Text>
+            <Text style={styles.summaryValue}>{onboarding}</Text>
+          </View>
+          <View style={styles.summaryRow}>
+            <Text style={styles.summaryLabel}>Not Engaged</Text>
+            <Text style={styles.summaryValue}>{notEngaged}</Text>
           </View>
         </View>
 

@@ -12,6 +12,7 @@ import {
   MIGRATION_STATUS_LABELS,
   REBUILD_STATUS_LABELS,
   PLATFORM_LABELS,
+  ENGAGEMENT_TIER_LABELS,
 } from "@/lib/constants";
 
 export type ViewMode = "grouped" | "list";
@@ -20,6 +21,7 @@ export interface Filters {
   migrationStatus: string;
   rebuildStatus: string;
   platform: string;
+  engagementTier: string;
 }
 
 interface OverviewToolbarProps {
@@ -38,7 +40,8 @@ export function OverviewToolbar({
   const hasActiveFilters =
     filters.migrationStatus !== "all" ||
     filters.rebuildStatus !== "all" ||
-    filters.platform !== "all";
+    filters.platform !== "all" ||
+    filters.engagementTier !== "all";
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -73,6 +76,25 @@ export function OverviewToolbar({
       <div className="h-5 w-px bg-border" />
 
       {/* Filters */}
+      <Select
+        value={filters.engagementTier}
+        onValueChange={(v) =>
+          onFilterChange({ ...filters, engagementTier: v })
+        }
+      >
+        <SelectTrigger size="sm" className="h-7 border-border bg-card text-xs text-muted-foreground">
+          <SelectValue placeholder="Tier" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">All Tiers</SelectItem>
+          {Object.entries(ENGAGEMENT_TIER_LABELS).map(([value, label]) => (
+            <SelectItem key={value} value={value}>
+              {label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
       <Select
         value={filters.migrationStatus}
         onValueChange={(v) =>
@@ -139,6 +161,7 @@ export function OverviewToolbar({
               migrationStatus: "all",
               rebuildStatus: "all",
               platform: "all",
+              engagementTier: "all",
             })
           }
           className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:text-muted-foreground"

@@ -21,9 +21,10 @@ async function getStats() {
   const uniqueStates = new Set(locations.map((l) => l.state)).size;
 
   // Group counts for the segment bar
-  const liveCount = locations.filter((l) => getLocationGroup(l) === "live").length;
-  const inProgressCount = locations.filter((l) => getLocationGroup(l) === "in-progress").length;
-  const notStartedCount = locations.filter((l) => getLocationGroup(l) === "not-started").length;
+  const laufBuiltCount = locations.filter((l) => getLocationGroup(l) === "lauf-built").length;
+  const inDevCount = locations.filter((l) => getLocationGroup(l) === "in-development").length;
+  const onboardingCount = locations.filter((l) => getLocationGroup(l) === "onboarding").length;
+  const notEngagedCount = locations.filter((l) => getLocationGroup(l) === "not-engaged").length;
 
   // Reputation
   const ratedLocations = locations.filter((l) => l.googleRating !== null);
@@ -96,9 +97,10 @@ async function getStats() {
     locations,
     total,
     uniqueStates,
-    liveCount,
-    inProgressCount,
-    notStartedCount,
+    laufBuiltCount,
+    inDevCount,
+    onboardingCount,
+    notEngagedCount,
     avgRating,
     totalReviews,
     ratedCount,
@@ -119,38 +121,52 @@ async function getStats() {
 export default async function OverviewPage() {
   const stats = await getStats();
 
+  const statsProps = {
+    total: stats.total,
+    uniqueStates: stats.uniqueStates,
+    laufBuiltCount: stats.laufBuiltCount,
+    inDevCount: stats.inDevCount,
+    onboardingCount: stats.onboardingCount,
+    notEngagedCount: stats.notEngagedCount,
+    avgLighthouse: stats.avgLighthouse,
+    lighthouseGrade: stats.lighthouseGrade,
+    auditedCount: stats.auditedCount,
+    avgRating: stats.avgRating,
+    totalReviews: stats.totalReviews,
+    ratedCount: stats.ratedCount,
+    avgSeoScore: stats.avgSeoScore,
+    seoGrade: stats.seoGrade,
+    totalSeoIssues: stats.totalSeoIssues,
+    seoCrawledCount: stats.seoCrawledCount,
+    avgMarketScore: stats.avgMarketScore,
+    marketGrade: stats.marketGrade,
+    avgRatingDelta: stats.avgRatingDelta,
+    totalCompetitors: stats.totalCompetitors,
+  };
+
   return (
     <>
       <Topbar title="Portfolio Overview" description="Embark Pet Services">
         <ExportButton />
       </Topbar>
       <div className="flex-1 overflow-y-auto">
-        <div className="border-b border-border bg-background px-4 py-4 sm:px-6">
-          <StatsGrid
-            total={stats.total}
-            uniqueStates={stats.uniqueStates}
-            liveCount={stats.liveCount}
-            inProgressCount={stats.inProgressCount}
-            notStartedCount={stats.notStartedCount}
-            avgLighthouse={stats.avgLighthouse}
-            lighthouseGrade={stats.lighthouseGrade}
-            auditedCount={stats.auditedCount}
-            avgRating={stats.avgRating}
-            totalReviews={stats.totalReviews}
-            ratedCount={stats.ratedCount}
-            avgSeoScore={stats.avgSeoScore}
-            seoGrade={stats.seoGrade}
-            totalSeoIssues={stats.totalSeoIssues}
-            seoCrawledCount={stats.seoCrawledCount}
-            avgMarketScore={stats.avgMarketScore}
-            marketGrade={stats.marketGrade}
-            avgRatingDelta={stats.avgRatingDelta}
-            totalCompetitors={stats.totalCompetitors}
-          />
+        {/* Mobile/tablet: stats above cards */}
+        <div className="border-b border-border bg-background px-4 py-4 sm:px-6 lg:hidden">
+          <StatsGrid {...statsProps} />
         </div>
 
-        <div className="p-4 sm:p-6">
-          <PortfolioOverview locations={stats.locations} />
+        <div className="p-4 sm:p-6 lg:flex lg:gap-6">
+          {/* Left: location cards */}
+          <div className="min-w-0 flex-1">
+            <PortfolioOverview locations={stats.locations} />
+          </div>
+
+          {/* Right: sticky stats column (desktop only) */}
+          <div className="hidden lg:block w-80 shrink-0">
+            <div className="sticky top-0 max-h-[calc(100vh-3.5rem)] overflow-y-auto">
+              <StatsGrid {...statsProps} orientation="vertical" />
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -2,6 +2,8 @@
 
 import type { Location } from "@/types";
 import { LighthouseScore } from "./LighthouseScore";
+import { SectionDivider } from "@/components/shared/SectionDivider";
+import { getLocationGroup, GROUP_META } from "@/lib/groupLocations";
 import {
   ScatterChart,
   Scatter,
@@ -40,8 +42,6 @@ function ScoreCell({ score }: { score: number | null }) {
   );
 }
 
-const LAUF_SLUGS = new Set(["hound-around", "embark-pet-services", "cadence-private-capital"]);
-
 export function MetricsView({ locations }: MetricsViewProps) {
   const locationsWithScores = locations.filter(
     (l) => l.lighthousePerf !== null || l.lighthouseSEO !== null
@@ -53,7 +53,7 @@ export function MetricsView({ locations }: MetricsViewProps) {
       name: l.name,
       performance: l.lighthousePerf!,
       quality: Math.round(((l.lighthouseA11y! + l.lighthouseBP! + l.lighthouseSEO!) / 3)),
-      isLauf: LAUF_SLUGS.has(l.slug),
+      isLauf: getLocationGroup(l) === "lauf-built",
     }));
 
   const avgPerf = scatterData.length > 0
@@ -65,47 +65,53 @@ export function MetricsView({ locations }: MetricsViewProps) {
 
   return (
     <div className="space-y-8">
-      {/* Score Table */}
-      <div className="overflow-x-auto rounded-lg border border-border">
-        <table className="w-full min-w-[700px]">
-          <thead>
-            <tr className="border-b border-border">
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
-                Location
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
-                Performance
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
-                Accessibility
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
-                SEO
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
-                Best Practices
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
-                Last Audited
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {locations.map((location) => (
-              <tr
-                key={location.id}
-                className="border-b border-border transition-colors hover:bg-muted"
-              >
-                <td className="px-4 py-3">
-                  <div>
-                    <span className="text-sm font-medium text-foreground">
-                      {location.name}
-                    </span>
-                    <span className="ml-2 text-xs text-muted-foreground">
-                      {location.city}, {location.state}
-                    </span>
-                  </div>
-                </td>
+      {/* 01 // LIGHTHOUSE SCORES */}
+      <div>
+        <SectionDivider number="01" title="Lighthouse Scores" />
+        <div className="overflow-x-auto rounded-lg border border-border">
+          <table className="w-full min-w-[700px]">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                  Location
+                </th>
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                  Performance
+                </th>
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                  Accessibility
+                </th>
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                  SEO
+                </th>
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                  Best Practices
+                </th>
+                <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+                  Last Audited
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {locations.map((location) => {
+                const tier = getLocationGroup(location);
+                const tierMeta = GROUP_META[tier];
+                return (
+                <tr
+                  key={location.id}
+                  className={`border-b border-border transition-colors hover:bg-muted ${tier === "not-engaged" ? "opacity-60" : ""}`}
+                  style={{ borderLeft: `3px solid ${tierMeta.accent}` }}
+                >
+                  <td className="px-4 py-3">
+                    <div>
+                      <span className="font-display text-sm font-medium text-foreground">
+                        {location.name}
+                      </span>
+                      <span className="ml-2 text-xs text-muted-foreground">
+                        {location.city}, {location.state}
+                      </span>
+                    </div>
+                  </td>
                 <ScoreCell score={location.lighthousePerf} />
                 <ScoreCell score={location.lighthouseA11y} />
                 <ScoreCell score={location.lighthouseSEO} />
@@ -115,20 +121,21 @@ export function MetricsView({ locations }: MetricsViewProps) {
                     ? new Date(location.lighthouseAudited).toLocaleDateString()
                     : "—"}
                 </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Scatter Plot — Performance vs Quality */}
+      {/* 02 // PERFORMANCE VS QUALITY */}
       {scatterData.length > 0 && (
+        <div>
+        <SectionDivider number="02" title="Performance vs Quality" />
         <div className="rounded-lg border border-border bg-card p-4 sm:p-6">
           <div className="mb-4">
-            <h3 className="text-sm font-medium text-foreground">
-              Performance vs Quality Score
-            </h3>
-            <p className="mt-0.5 text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               Quality = average of Accessibility, Best Practices, and SEO. Dashed lines show portfolio averages.
             </p>
           </div>
@@ -204,17 +211,24 @@ export function MetricsView({ locations }: MetricsViewProps) {
             </ScatterChart>
           </ResponsiveContainer>
         </div>
+        </div>
       )}
 
-      {/* Per-location scores */}
+      {/* 03 // SCORE BREAKDOWN */}
       {locationsWithScores.length > 0 && (
+        <div>
+        <SectionDivider number="03" title="Score Breakdown" />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {locationsWithScores.map((location) => (
+          {locationsWithScores.map((location) => {
+            const tier = getLocationGroup(location);
+            const tierMeta = GROUP_META[tier];
+            return (
             <div
               key={location.id}
               className="rounded-lg border border-border bg-card p-5"
+              style={{ borderLeft: `3px solid ${tierMeta.accent}` }}
             >
-              <h4 className="mb-3 text-sm font-medium text-foreground">
+              <h4 className="mb-3 font-display text-sm font-medium text-foreground">
                 {location.name}
               </h4>
               <div className="flex justify-around">
@@ -232,7 +246,9 @@ export function MetricsView({ locations }: MetricsViewProps) {
                 )}
               </div>
             </div>
-          ))}
+            );
+          })}
+        </div>
         </div>
       )}
     </div>

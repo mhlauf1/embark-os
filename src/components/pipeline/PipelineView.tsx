@@ -15,21 +15,23 @@ export function PipelineView({ locations }: PipelineViewProps) {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="flex h-full flex-col">
-      <div className="border-b border-border px-4 sm:px-6">
-        <TabsList className="bg-transparent p-0">
-          <TabsTrigger
-            value="migration"
-            className="relative rounded-none border-b-2 border-transparent px-4 py-2.5 text-sm text-muted-foreground data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
-          >
-            Migration Pipeline
-          </TabsTrigger>
-          <TabsTrigger
-            value="rebuild"
-            className="relative rounded-none border-b-2 border-transparent px-4 py-2.5 text-sm text-muted-foreground data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
-          >
-            Rebuild Pipeline
-          </TabsTrigger>
-        </TabsList>
+      <div className="border-b border-border px-4 sm:px-6 py-2">
+        <div className="flex items-center rounded-lg border border-border bg-card p-0.5 w-fit">
+          <TabsList className="bg-transparent p-0 h-auto">
+            <TabsTrigger
+              value="migration"
+              className="rounded-md px-3 py-1.5 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-wider text-muted-foreground data-[state=active]:bg-border data-[state=active]:text-foreground data-[state=active]:shadow-none"
+            >
+              Migration
+            </TabsTrigger>
+            <TabsTrigger
+              value="rebuild"
+              className="rounded-md px-3 py-1.5 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-wider text-muted-foreground data-[state=active]:bg-border data-[state=active]:text-foreground data-[state=active]:shadow-none"
+            >
+              Rebuild
+            </TabsTrigger>
+          </TabsList>
+        </div>
       </div>
 
       <TabsContent value="migration" className="mt-0 flex-1 overflow-x-auto p-4 sm:p-6">

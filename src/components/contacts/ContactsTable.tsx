@@ -41,7 +41,7 @@ const columns: ColumnDef<ContactWithLocation>[] = [
       </button>
     ),
     cell: ({ row }) => (
-      <span className="font-medium text-foreground">{row.original.name}</span>
+      <span className="font-display font-medium text-foreground">{row.original.name}</span>
     ),
   },
   {
@@ -284,7 +284,7 @@ export function ContactsTable({ contacts, locations }: ContactsTableProps) {
             {table.getHeaderGroups().map((hg) => (
               <TableRow key={hg.id} className="border-b border-border hover:bg-transparent">
                 {hg.headers.map((h) => (
-                  <TableHead key={h.id} className="text-xs font-medium text-muted-foreground">
+                  <TableHead key={h.id} className="font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                     {h.isPlaceholder ? null : flexRender(h.column.columnDef.header, h.getContext())}
                   </TableHead>
                 ))}

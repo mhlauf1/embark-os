@@ -2,13 +2,17 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Star } from "lucide-react";
 import type { Location } from "@/types";
-import { PipelineTrack } from "@/components/overview/PipelineTrack";
 import { LighthouseScore } from "@/components/metrics/LighthouseScore";
-import { PLATFORM_LABELS } from "@/lib/constants";
+import { REBUILD_STATUS_LABELS, MIGRATION_STATUS_LABELS } from "@/lib/constants";
+import { getLocationGroup, GROUP_META } from "@/lib/groupLocations";
 
-type SortKey = "name" | "city" | "migrationStatus" | "rebuildStatus" | "lighthousePerf";
+function isMigrationActive(migrationStatus: string): boolean {
+  return ["recon", "stakeholder-outreach", "access-gathered", "in-execution"].includes(migrationStatus);
+}
+
+type SortKey = "name" | "city" | "googleRating" | "rebuildStatus" | "lighthousePerf";
 type SortDir = "asc" | "desc";
 
 interface PortfolioListViewProps {
@@ -33,9 +37,9 @@ export function PortfolioListView({ locations }: PortfolioListViewProps) {
           av = `${a.city}, ${a.state}`;
           bv = `${b.city}, ${b.state}`;
           break;
-        case "migrationStatus":
-          av = a.migrationStatus;
-          bv = b.migrationStatus;
+        case "googleRating":
+          av = a.googleRating ?? -1;
+          bv = b.googleRating ?? -1;
           break;
         case "rebuildStatus":
           av = a.rebuildStatus;
@@ -67,14 +71,14 @@ export function PortfolioListView({ locations }: PortfolioListViewProps) {
   const headers: { key: SortKey; label: string; className?: string }[] = [
     { key: "name", label: "Name" },
     { key: "city", label: "Location" },
-    { key: "migrationStatus", label: "Migration" },
-    { key: "rebuildStatus", label: "Rebuild" },
+    { key: "googleRating", label: "Rating" },
+    { key: "rebuildStatus", label: "Status" },
     { key: "lighthousePerf", label: "Lighthouse", className: "text-right" },
   ];
 
   return (
     <div className="overflow-x-auto rounded-lg border border-border">
-      <table className="w-full min-w-[700px] text-sm">
+      <table className="w-full min-w-[800px] text-sm">
         <thead>
           <tr className="border-b border-border bg-card">
             {headers.map((h) => (
@@ -93,67 +97,78 @@ export function PortfolioListView({ locations }: PortfolioListViewProps) {
                 </button>
               </th>
             ))}
-            <th className="px-4 py-3 text-left font-[family-name:var(--font-geist-mono)] text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-              Platform
-            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-border">
-          {sorted.map((location) => (
-            <tr
-              key={location.id}
-              className="bg-background transition-colors hover:bg-card"
-            >
-              <td className="px-4 py-3">
-                <Link
-                  href={`/locations/${location.slug}`}
-                  className="font-display text-base text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+          {sorted.map((location) => {
+            const tier = getLocationGroup(location);
+            const meta = GROUP_META[tier];
+            return (
+              <tr
+                key={location.id}
+                className={`bg-background transition-colors hover:bg-card ${tier === "not-engaged" ? "opacity-65" : ""}`}
+              >
+                <td
+                  className="px-4 py-3"
+                  style={{ borderLeft: `3px solid ${meta.accent}` }}
                 >
-                  {location.name}
-                </Link>
-              </td>
-              <td className="px-4 py-3 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-wider text-muted-foreground">
-                {location.city}, {location.state}
-              </td>
-              <td className="px-4 py-3">
-                <div className="w-28">
-                  <PipelineTrack
-                    pipeline="migration"
-                    status={location.migrationStatus}
-                    compact
-                  />
-                </div>
-              </td>
-              <td className="px-4 py-3">
-                <div className="w-28">
-                  <PipelineTrack
-                    pipeline="rebuild"
-                    status={location.rebuildStatus}
-                    compact
-                  />
-                </div>
-              </td>
-              <td className="px-4 py-3 text-right">
-                {location.lighthousePerf !== null ? (
-                  <LighthouseScore
-                    score={location.lighthousePerf}
-                    size="sm"
-                    aria-label={`Lighthouse score: ${location.lighthousePerf}`}
-                  />
-                ) : (
-                  <span className="text-muted-foreground">&mdash;</span>
-                )}
-              </td>
-              <td className="px-4 py-3">
-                {location.currentPlatform && (
-                  <span className="rounded bg-muted px-2 py-0.5 font-[family-name:var(--font-geist-mono)] text-[11px] text-muted-foreground">
-                    {PLATFORM_LABELS[location.currentPlatform] ??
-                      location.currentPlatform}
-                  </span>
-                )}
-              </td>
-            </tr>
-          ))}
+                  <Link
+                    href={`/locations/${location.slug}`}
+                    className="font-display text-base text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+                  >
+                    {location.name}
+                  </Link>
+                </td>
+                <td className="px-4 py-3 font-[family-name:var(--font-geist-mono)] text-[11px] uppercase tracking-wider text-muted-foreground">
+                  {location.city}, {location.state}
+                </td>
+                <td className="px-4 py-3">
+                  {location.googleRating !== null ? (
+                    <span className="inline-flex items-center gap-1 text-[12px] text-muted-foreground">
+                      <Star className="h-3 w-3 fill-warning text-warning" />
+                      <span>{location.googleRating.toFixed(1)}</span>
+                      {location.googleReviewCount !== null && (
+                        <span className="text-muted-foreground/70">
+                          ({location.googleReviewCount})
+                        </span>
+                      )}
+                    </span>
+                  ) : (
+                    <span className="text-muted-foreground">&mdash;</span>
+                  )}
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-1.5">
+                    <span
+                      className="inline-block h-2 w-2 shrink-0 rounded-full"
+                      style={{ backgroundColor: meta.accent }}
+                    />
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      {REBUILD_STATUS_LABELS[location.rebuildStatus] ?? location.rebuildStatus}
+                    </span>
+                  </div>
+                  {isMigrationActive(location.migrationStatus) && (
+                    <div className="mt-0.5 pl-3.5">
+                      <span className="text-[10px] text-muted-foreground">
+                        Migration: {MIGRATION_STATUS_LABELS[location.migrationStatus] ?? location.migrationStatus}
+                      </span>
+                    </div>
+                  )}
+                </td>
+                <td className="px-4 py-3 text-right">
+                  {location.lighthousePerf !== null ? (
+                    <LighthouseScore
+                      score={location.lighthousePerf}
+                      size="sm"
+                      aria-label={`Lighthouse score: ${location.lighthousePerf}`}
+                    />
+                  ) : (
+                    <span className="text-muted-foreground">&mdash;</span>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

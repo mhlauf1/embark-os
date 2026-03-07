@@ -7,6 +7,7 @@ import { OverviewToolbar, type Filters, type ViewMode } from "./OverviewToolbar"
 import { PortfolioGroupedView } from "./PortfolioGroupedView";
 import { PortfolioListView } from "./PortfolioListView";
 import { useState } from "react";
+import { getLocationGroup } from "@/lib/groupLocations";
 
 interface PortfolioOverviewProps {
   locations: Location[];
@@ -19,6 +20,7 @@ export function PortfolioOverview({ locations }: PortfolioOverviewProps) {
     migrationStatus: "all",
     rebuildStatus: "all",
     platform: "all",
+    engagementTier: "all",
   });
 
   const filtered = useMemo(() => {
@@ -36,6 +38,11 @@ export function PortfolioOverview({ locations }: PortfolioOverviewProps) {
       if (
         filters.platform !== "all" &&
         l.currentPlatform !== filters.platform
+      )
+        return false;
+      if (
+        filters.engagementTier !== "all" &&
+        getLocationGroup(l) !== filters.engagementTier
       )
         return false;
       return true;
