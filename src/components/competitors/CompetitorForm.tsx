@@ -25,6 +25,7 @@ export function CompetitorForm({ locationId, competitor, onClose }: CompetitorFo
   const [form, setForm] = useState({
     name: competitor?.name ?? "",
     url: competitor?.url ?? "",
+    placeId: competitor?.placeId ?? "",
     googleRating: competitor?.googleRating?.toString() ?? "",
     googleReviewCount: competitor?.googleReviewCount?.toString() ?? "",
     notes: competitor?.notes ?? "",
@@ -55,6 +56,7 @@ export function CompetitorForm({ locationId, competitor, onClose }: CompetitorFo
       locationId,
       name: form.name,
       url: form.url || null,
+      placeId: form.placeId || null,
       googleRating: form.googleRating ? parseFloat(form.googleRating) : null,
       googleReviewCount: form.googleReviewCount ? parseInt(form.googleReviewCount) : null,
       notes: form.notes || null,
@@ -131,6 +133,16 @@ export function CompetitorForm({ locationId, competitor, onClose }: CompetitorFo
                 onChange={(e) => setForm({ ...form, googleReviewCount: e.target.value })}
                 className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
               />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="mb-1 block text-xs text-muted-foreground">Google Place ID</label>
+              <input
+                value={form.placeId}
+                onChange={(e) => setForm({ ...form, placeId: e.target.value })}
+                placeholder="e.g. ChIJ..."
+                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
+              />
+              <p className="mt-0.5 text-[10px] text-muted-foreground">For automated rating collection via Google Places API</p>
             </div>
           </div>
 

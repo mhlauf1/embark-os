@@ -1,0 +1,187 @@
+"use client";
+
+import type { MarketPosition } from "@/lib/market-position";
+import type { Location, Competitor, CompetitorRatingSnapshot, RatingSnapshot, AIVisibilityCheck } from "@/types";
+import { MarketTable } from "./MarketTable";
+import { ReputationRaceChart } from "./ReputationRaceChart";
+import { WebPerformanceGapChart } from "./WebPerformanceGapChart";
+import { AIVisibilitySection } from "./AIVisibilitySection";
+import { getGradeColor, getGradeBgColor } from "@/lib/grading";
+import { Swords, Target, Star, Bot } from "lucide-react";
+
+type LocationWithCompetitors = Location & {
+  competitors: (Competitor & { ratingSnapshots: CompetitorRatingSnapshot[] })[];
+  ratingSnapshots: RatingSnapshot[];
+  aiVisibilityChecks: AIVisibilityCheck[];
+};
+
+interface Props {
+  locations: LocationWithCompetitors[];
+  positions: MarketPosition[];
+  totalCompetitors: number;
+  marketsTracked: number;
+}
+
+export function CompetitorIntelDashboard({
+  locations,
+  positions,
+  totalCompetitors,
+  marketsTracked,
+}: Props) {
+  const avgScore = positions.length > 0
+    ? Math.round(positions.reduce((s, p) => s + p.compositeScore, 0) / positions.length)
+    : 0;
+  const avgGrade = avgScore >= 90 ? "A" : avgScore >= 80 ? "B" : avgScore >= 70 ? "C" : avgScore >= 60 ? "D" : "F";
+
+  const ratingsWithDelta = positions.filter((p) => p.ratingDelta !== null);
+  const avgRatingDelta = ratingsWithDelta.length > 0
+    ? Math.round(ratingsWithDelta.reduce((s, p) => s + p.ratingDelta!, 0) / ratingsWithDelta.length * 10) / 10
+    : null;
+
+  const allAiChecks = locations.flatMap((l) => l.aiVisibilityChecks);
+  const embarkMentions = allAiChecks.filter((c) => c.mentionsEmbark).length;
+  const totalChecks = allAiChecks.length;
+
+  return (
+    <div className="space-y-8">
+      {/* 01 // MARKET OVERVIEW */}
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
+            01 // MARKET OVERVIEW
+          </span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Total Competitors */}
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Swords className="h-4 w-4" />
+              <span className="text-xs">Total Competitors</span>
+            </div>
+            <p className="mt-2 font-display text-2xl text-foreground">{totalCompetitors}</p>
+            <p className="mt-0.5 font-[family-name:var(--font-geist-mono)] text-xs text-muted-foreground">
+              across {marketsTracked} markets
+            </p>
+          </div>
+
+          {/* Avg Market Position */}
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Target className="h-4 w-4" />
+              <span className="text-xs">Avg Market Position</span>
+            </div>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="font-display text-2xl text-foreground">{avgScore}</span>
+              <span
+                className="rounded px-1.5 py-0.5 font-[family-name:var(--font-geist-mono)] text-xs font-medium"
+                style={{ color: getGradeColor(avgGrade), backgroundColor: getGradeBgColor(avgGrade) }}
+              >
+                {avgGrade}
+              </span>
+            </div>
+            <p className="mt-0.5 font-[family-name:var(--font-geist-mono)] text-xs text-muted-foreground">
+              composite score
+            </p>
+          </div>
+
+          {/* Rating Advantage */}
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Star className="h-4 w-4" />
+              <span className="text-xs">Rating Advantage</span>
+            </div>
+            <div className="mt-2 flex items-baseline gap-2">
+              {avgRatingDelta !== null ? (
+                <>
+                  <span className="font-display text-2xl text-foreground">
+                    {avgRatingDelta > 0 ? "+" : ""}{avgRatingDelta.toFixed(1)}
+                  </span>
+                  <span
+                    className="rounded px-1.5 py-0.5 text-xs font-medium"
+                    style={{
+                      color: avgRatingDelta >= 0 ? "#22c55e" : "#ef4444",
+                      backgroundColor: avgRatingDelta >= 0 ? "rgba(34,197,94,0.1)" : "rgba(239,68,68,0.1)",
+                    }}
+                  >
+                    {avgRatingDelta >= 0 ? "ahead" : "behind"}
+                  </span>
+                </>
+              ) : (
+                <span className="font-display text-2xl text-muted-foreground/30">—</span>
+              )}
+            </div>
+            <p className="mt-0.5 font-[family-name:var(--font-geist-mono)] text-xs text-muted-foreground">
+              vs avg competitor
+            </p>
+          </div>
+
+          {/* AI Visibility */}
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Bot className="h-4 w-4" />
+              <span className="text-xs">AI Visibility</span>
+            </div>
+            <div className="mt-2 flex items-baseline gap-2">
+              {totalChecks > 0 ? (
+                <span className="font-display text-2xl text-foreground">
+                  {Math.round((embarkMentions / totalChecks) * 100)}%
+                </span>
+              ) : (
+                <span className="font-display text-2xl text-muted-foreground/30">—</span>
+              )}
+            </div>
+            <p className="mt-0.5 font-[family-name:var(--font-geist-mono)] text-xs text-muted-foreground">
+              {totalChecks > 0 ? `${embarkMentions}/${totalChecks} mentions` : "no scans yet"}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 02 // MARKET-BY-MARKET */}
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
+            02 // MARKET-BY-MARKET
+          </span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+        <MarketTable positions={positions} />
+      </section>
+
+      {/* 03 // REPUTATION RACE */}
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
+            03 // REPUTATION RACE
+          </span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+        <ReputationRaceChart positions={positions} />
+      </section>
+
+      {/* 04 // WEB PERFORMANCE GAP */}
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
+            04 // WEB PERFORMANCE GAP
+          </span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+        <WebPerformanceGapChart positions={positions} />
+      </section>
+
+      {/* 05 // AI BRAND VISIBILITY */}
+      <section>
+        <div className="mb-4 flex items-center gap-3">
+          <span className="font-[family-name:var(--font-geist-mono)] text-xs tracking-wider text-muted-foreground">
+            05 // AI BRAND VISIBILITY
+          </span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+        <AIVisibilitySection locations={locations} />
+      </section>
+    </div>
+  );
+}

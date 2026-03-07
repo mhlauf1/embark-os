@@ -510,29 +510,29 @@ async function main() {
   // Competitors
   const competitorData = [
     // Rio Grooming competitors
-    { locationId: rio.id, name: "Petropolis Grooming", googleRating: 4.5, googleReviewCount: 89, serviceGrooming: true, serviceRetail: true, notes: "Local grooming salon, strong Google presence" },
-    { locationId: rio.id, name: "Paws & Claws Salon", googleRating: 4.3, googleReviewCount: 45, serviceGrooming: true, notes: "Smaller salon, lower volume" },
+    { locationId: rio.id, name: "Petropolis Grooming", url: "https://petropolisgrooming.com", googleRating: 4.5, googleReviewCount: 89, serviceGrooming: true, serviceRetail: true, notes: "Local grooming salon, strong Google presence" },
+    { locationId: rio.id, name: "Paws & Claws Salon", url: "https://pawsandclawssalon.com", googleRating: 4.3, googleReviewCount: 45, serviceGrooming: true, notes: "Smaller salon, lower volume" },
     // Barks & Rec competitors
-    { locationId: barks.id, name: "Lucky Dog Daycare", googleRating: 4.7, googleReviewCount: 112, serviceBoarding: true, serviceDaycare: true, notes: "Primary competitor in Hastings market" },
-    { locationId: barks.id, name: "Hastings Pet Lodge", googleRating: 4.4, googleReviewCount: 67, serviceBoarding: true, serviceDaycare: true, serviceGrooming: true, notes: "Offers grooming as differentiator" },
+    { locationId: barks.id, name: "Lucky Dog Daycare", url: "https://luckydogdaycare.com", googleRating: 4.7, googleReviewCount: 112, serviceBoarding: true, serviceDaycare: true, notes: "Primary competitor in Hastings market" },
+    { locationId: barks.id, name: "Hastings Pet Lodge", url: "https://hastingspetlodge.com", googleRating: 4.4, googleReviewCount: 67, serviceBoarding: true, serviceDaycare: true, serviceGrooming: true, notes: "Offers grooming as differentiator" },
     // Boxers competitors
-    { locationId: boxers.id, name: "Waggin' Tails Resort", googleRating: 4.8, googleReviewCount: 203, serviceBoarding: true, serviceDaycare: true, serviceGrooming: true, notes: "Largest competitor in Belpre area" },
-    { locationId: boxers.id, name: "Happy Paws Kennel", googleRating: 4.2, googleReviewCount: 34, serviceBoarding: true, notes: "Budget option, boarding only" },
-    { locationId: boxers.id, name: "Country Critters Care", googleRating: 4.6, googleReviewCount: 156, serviceBoarding: true, serviceDaycare: true, serviceTraining: true, notes: "Strong training program" },
+    { locationId: boxers.id, name: "Waggin' Tails Resort", url: "https://waggintailsresort.com", googleRating: 4.8, googleReviewCount: 203, serviceBoarding: true, serviceDaycare: true, serviceGrooming: true, notes: "Largest competitor in Belpre area" },
+    { locationId: boxers.id, name: "Happy Paws Kennel", url: "https://happypawskennel.com", googleRating: 4.2, googleReviewCount: 34, serviceBoarding: true, notes: "Budget option, boarding only" },
+    { locationId: boxers.id, name: "Country Critters Care", url: "https://countrycritterscare.com", googleRating: 4.6, googleReviewCount: 156, serviceBoarding: true, serviceDaycare: true, serviceTraining: true, notes: "Strong training program" },
     // Kingdom Canine competitors
-    { locationId: kingdom.id, name: "Pacific Pet Resort", googleRating: 4.4, googleReviewCount: 78, serviceBoarding: true, serviceDaycare: true, notes: "Nearby competitor, smaller facility" },
-    { locationId: kingdom.id, name: "Show-Me K9 Academy", googleRating: 4.7, googleReviewCount: 134, serviceTraining: true, serviceBoarding: true, notes: "Training-focused, strong reputation" },
+    { locationId: kingdom.id, name: "Pacific Pet Resort", url: "https://pacificpetresort.com", googleRating: 4.4, googleReviewCount: 78, serviceBoarding: true, serviceDaycare: true, notes: "Nearby competitor, smaller facility" },
+    { locationId: kingdom.id, name: "Show-Me K9 Academy", url: "https://showmek9.com", googleRating: 4.7, googleReviewCount: 134, serviceTraining: true, serviceBoarding: true, notes: "Training-focused, strong reputation" },
     // HAFH competitors
-    { locationId: hafh.id, name: "Fargo Pet Lodge", googleRating: 4.3, googleReviewCount: 91, serviceBoarding: true, serviceDaycare: true, serviceGrooming: true, notes: "Main competitor in Fargo market" },
-    { locationId: hafh.id, name: "Red River Pet Care", googleRating: 4.5, googleReviewCount: 177, serviceBoarding: true, serviceDaycare: true, serviceMobileGroom: true, notes: "Also offers mobile grooming" },
+    { locationId: hafh.id, name: "Fargo Pet Lodge", url: "https://fargopetlodge.com", googleRating: 4.3, googleReviewCount: 91, serviceBoarding: true, serviceDaycare: true, serviceGrooming: true, notes: "Main competitor in Fargo market" },
+    { locationId: hafh.id, name: "Red River Pet Care", url: "https://redriverpetcare.com", googleRating: 4.5, googleReviewCount: 177, serviceBoarding: true, serviceDaycare: true, serviceMobileGroom: true, notes: "Also offers mobile grooming" },
     // Wags competitors
-    { locationId: wags.id, name: "Moorhead Mutt Hut", googleRating: 4.6, googleReviewCount: 63, serviceBoarding: true, serviceDaycare: true, notes: "Small local competitor" },
+    { locationId: wags.id, name: "Moorhead Mutt Hut", url: "https://moorheadmutthut.com", googleRating: 4.6, googleReviewCount: 63, serviceBoarding: true, serviceDaycare: true, notes: "Small local competitor" },
     // Hound Around competitors
-    { locationId: hound.id, name: "Cottage Grove K9", googleRating: 4.5, googleReviewCount: 145, serviceBoarding: true, serviceDaycare: true, serviceGrooming: true, notes: "Main local competitor" },
-    { locationId: hound.id, name: "South Metro Pet Spa", googleRating: 4.8, googleReviewCount: 210, serviceGrooming: true, serviceRetail: true, notes: "Grooming-focused, premium positioning" },
+    { locationId: hound.id, name: "Cottage Grove K9", url: "https://cottagegrovek9.com", googleRating: 4.5, googleReviewCount: 145, serviceBoarding: true, serviceDaycare: true, serviceGrooming: true, notes: "Main local competitor" },
+    { locationId: hound.id, name: "South Metro Pet Spa", url: "https://southmetropetspa.com", googleRating: 4.8, googleReviewCount: 210, serviceGrooming: true, serviceRetail: true, notes: "Grooming-focused, premium positioning" },
     // CCC competitors
-    { locationId: ccc.id, name: "Dogtopia West Des Moines", googleRating: 4.7, googleReviewCount: 298, serviceBoarding: true, serviceDaycare: true, serviceGrooming: true, notes: "National franchise, strong brand" },
-    { locationId: ccc.id, name: "Camp Bow Wow WDM", googleRating: 4.5, googleReviewCount: 189, serviceBoarding: true, serviceDaycare: true, notes: "National franchise competitor" },
+    { locationId: ccc.id, name: "Dogtopia West Des Moines", url: "https://www.dogtopia.com/west-des-moines", googleRating: 4.7, googleReviewCount: 298, serviceBoarding: true, serviceDaycare: true, serviceGrooming: true, notes: "National franchise, strong brand" },
+    { locationId: ccc.id, name: "Camp Bow Wow WDM", url: "https://www.campbowwow.com/west-des-moines", googleRating: 4.5, googleReviewCount: 189, serviceBoarding: true, serviceDaycare: true, notes: "National franchise competitor" },
   ];
 
   for (const comp of competitorData) {
@@ -561,7 +561,27 @@ async function main() {
     }
   }
 
-  console.log("Seed complete: 10 locations, 6 contacts, 6 notes, 16 competitors, 20 rating snapshots");
+  // Competitor Rating Snapshots (historical trends for competitor ratings)
+  const allCompetitors = await prisma.competitor.findMany();
+  for (const comp of allCompetitors) {
+    if (comp.googleRating !== null) {
+      const baseRating = comp.googleRating;
+      const baseReviews = comp.googleReviewCount ?? 50;
+      const months = ["2025-12-01", "2026-01-01", "2026-02-01", "2026-03-01"];
+      for (let i = 0; i < months.length; i++) {
+        await prisma.competitorRatingSnapshot.create({
+          data: {
+            competitorId: comp.id,
+            googleRating: Math.round((baseRating - 0.1 * (3 - i)) * 10) / 10,
+            googleReviewCount: Math.round(baseReviews - (3 - i) * Math.round(baseReviews * 0.05)),
+            recordedAt: new Date(months[i]),
+          },
+        });
+      }
+    }
+  }
+
+  console.log("Seed complete: 10 locations, 6 contacts, 6 notes, 16 competitors, 20 rating snapshots, competitor rating history");
 }
 
 main()

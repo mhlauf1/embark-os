@@ -1,6 +1,6 @@
-import type { Location, Contact, Note, Competitor, RatingSnapshot, AuditSnapshot, SeoSnapshot } from "@prisma/client";
+import type { Location, Contact, Note, Competitor, RatingSnapshot, AuditSnapshot, SeoSnapshot, CompetitorSnapshot, CompetitorRatingSnapshot, AIVisibilityCheck } from "@prisma/client";
 
-export type { Location, Contact, Note, Competitor, RatingSnapshot, AuditSnapshot, SeoSnapshot };
+export type { Location, Contact, Note, Competitor, RatingSnapshot, AuditSnapshot, SeoSnapshot, CompetitorSnapshot, CompetitorRatingSnapshot, AIVisibilityCheck };
 
 export type LocationWithRelations = Location & {
   contacts: Contact[];
@@ -9,6 +9,11 @@ export type LocationWithRelations = Location & {
   ratingSnapshots: RatingSnapshot[];
   auditSnapshots: AuditSnapshot[];
   seoSnapshots: SeoSnapshot[];
+};
+
+export type CompetitorWithSnapshots = Competitor & {
+  snapshots: CompetitorSnapshot[];
+  ratingSnapshots: CompetitorRatingSnapshot[];
 };
 
 export interface SeoCheckResult {

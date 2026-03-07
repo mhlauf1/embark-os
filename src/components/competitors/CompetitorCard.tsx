@@ -4,6 +4,8 @@ import { Star, ExternalLink, Pencil, Trash2 } from "lucide-react";
 import type { Competitor } from "@/types";
 import { type ServiceKey, SERVICE_LABELS } from "@/types";
 import { LighthouseScore } from "@/components/metrics/LighthouseScore";
+import { CompetitorAuditButton } from "@/components/competitors/CompetitorAuditButton";
+import { getGradeColor, getGradeBgColor } from "@/lib/grading";
 
 const SERVICE_KEYS: ServiceKey[] = [
   "serviceBoarding", "serviceDaycare", "serviceGrooming", "serviceTraining",
@@ -14,16 +16,30 @@ interface CompetitorCardProps {
   competitor: Competitor;
   onEdit: () => void;
   onDelete: () => void;
+  onRefresh: () => void;
 }
 
-export function CompetitorCard({ competitor, onEdit, onDelete }: CompetitorCardProps) {
+export function CompetitorCard({ competitor, onEdit, onDelete, onRefresh }: CompetitorCardProps) {
   const activeServices = SERVICE_KEYS.filter((key) => competitor[key]);
 
   return (
     <div className="rounded-lg border border-border bg-card p-4">
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
-          <h4 className="truncate font-display text-base text-foreground">{competitor.name}</h4>
+          <div className="flex items-center gap-2">
+            <h4 className="truncate font-display text-base text-foreground">{competitor.name}</h4>
+            {competitor.seoGrade && (
+              <span
+                className="rounded px-1.5 py-0.5 font-[family-name:var(--font-geist-mono)] text-[10px] font-medium"
+                style={{
+                  color: getGradeColor(competitor.seoGrade),
+                  backgroundColor: getGradeBgColor(competitor.seoGrade),
+                }}
+              >
+                SEO {competitor.seoGrade}
+              </span>
+            )}
+          </div>
           {competitor.url && (
             <a
               href={competitor.url}
@@ -36,6 +52,11 @@ export function CompetitorCard({ competitor, onEdit, onDelete }: CompetitorCardP
           )}
         </div>
         <div className="ml-2 flex items-center gap-1">
+          <CompetitorAuditButton
+            competitorId={competitor.id}
+            hasUrl={!!competitor.url}
+            onComplete={onRefresh}
+          />
           <button onClick={onEdit} className="rounded-md p-1 text-muted-foreground hover:text-foreground">
             <Pencil className="h-3.5 w-3.5" />
           </button>

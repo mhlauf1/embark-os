@@ -89,12 +89,13 @@ model Location {
   assetNotes     String?
 
   // Relations
-  contacts        Contact[]
-  notes           Note[]
-  competitors     Competitor[]
-  ratingSnapshots RatingSnapshot[]
-  auditSnapshots  AuditSnapshot[]
-  seoSnapshots    SeoSnapshot[]
+  contacts           Contact[]
+  notes              Note[]
+  competitors        Competitor[]
+  ratingSnapshots    RatingSnapshot[]
+  auditSnapshots     AuditSnapshot[]
+  seoSnapshots       SeoSnapshot[]
+  aiVisibilityChecks AIVisibilityCheck[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -152,6 +153,9 @@ model Competitor {
   googleRating      Float?
   googleReviewCount Int?
   notes             String?
+  placeId           String?
+  seoScore          Int?
+  seoGrade          String?
 
   // Services (mirror Location)
   serviceBoarding    Boolean @default(false)
@@ -175,8 +179,62 @@ model Competitor {
   lighthouseMobileBP   Int?
   lighthouseAudited    DateTime?
 
+  // Relations
+  snapshots       CompetitorSnapshot[]
+  ratingSnapshots CompetitorRatingSnapshot[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model CompetitorSnapshot {
+  id             String     @id @default(cuid())
+  competitorId   String
+  competitor     Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  strategy       String     // "desktop" | "mobile"
+  url            String
+  scorePerf      Int
+  scoreA11y      Int
+  scoreSEO       Int
+  scoreBP        Int
+  overallScore   Float
+  letterGrade    String
+  auditDetails   String     // JSON blob
+  seoScore       Int?
+  seoGrade       String?
+  seoChecks      String?    // JSON: SeoCheckResult[]
+  responseTimeMs Int?
+  createdAt      DateTime   @default(now())
+
+  @@index([competitorId, strategy, createdAt])
+}
+
+model CompetitorRatingSnapshot {
+  id                String     @id @default(cuid())
+  competitorId      String
+  competitor        Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  googleRating      Float
+  googleReviewCount Int
+  recordedAt        DateTime   @default(now())
+
+  @@index([competitorId, recordedAt])
+}
+
+model AIVisibilityCheck {
+  id                   String   @id @default(cuid())
+  locationId           String
+  location             Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  prompt               String
+  promptSlug           String
+  model                String
+  response             String
+  mentionsEmbark       Boolean  @default(false)
+  embarkPosition       Int?
+  mentionedNames       String   // JSON: string[]
+  competitorsMentioned String   // JSON: { name, position }[]
+  createdAt            DateTime @default(now())
+
+  @@index([locationId, promptSlug, createdAt])
 }
 
 model Contact {
